@@ -26,7 +26,6 @@ const App = () => {
 
   const checkLogin = async () => {
     const token = await getItem();
-
     token && setAccessToken(token);
   };
 
