@@ -32,7 +32,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -47,5 +47,14 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>AirbnbCereal_W_Bd.otf</string>
+		<string>AirbnbCereal_W_Bk.otf</string>
+		<string>AirbnbCereal_W_Blk.otf</string>
+		<string>AirbnbCereal_W_Lt.otf</string>
+		<string>AirbnbCereal_W_Md.otf</string>
+		<string>AirbnbCereal_W_XBd.otf</string>
+	</array>
 </dict>
 </plist>
