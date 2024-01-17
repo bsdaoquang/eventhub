@@ -2,7 +2,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import AuthNavigator from './src/navigators/AuthNavigator';
 import {SplashScreen} from './src/screens';
-import {StatusBar} from 'react-native';
+import {SafeAreaView, StatusBar} from 'react-native';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import MainNavigator from './src/navigators/MainNavigator';
 
