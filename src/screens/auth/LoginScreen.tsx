@@ -13,7 +13,7 @@ import {
 import {appColors} from '../../constants/appColors';
 import SocialLogin from './components/SocialLogin';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRemember, setIsRemember] = useState(true);
@@ -65,7 +65,7 @@ const LoginScreen = () => {
           </RowComponent>
           <ButtonComponent
             text="Forgot Password?"
-            onPress={() => {}}
+            onPress={() => navigation.navigate('ForgotPassword')}
             type="text"
           />
         </RowComponent>
@@ -78,7 +78,11 @@ const LoginScreen = () => {
       <SectionComponent>
         <RowComponent justify="center">
           <TextComponent text="Don’t have an account? " />
-          <ButtonComponent type="link" text="Sign up" />
+          <ButtonComponent
+            type="link"
+            text="Sign up"
+            onPress={() => navigation.navigate('SignUpScreen')}
+          />
         </RowComponent>
       </SectionComponent>
     </ContainerComponent>

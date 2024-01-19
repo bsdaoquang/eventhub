@@ -20,6 +20,7 @@ interface Props {
   styles?: StyleProp<ViewStyle>;
   textColor?: string;
   textStyles?: StyleProp<TextStyle>;
+  textFont?: string;
   onPress?: () => void;
   iconFlex?: 'right' | 'left';
 }
@@ -30,6 +31,7 @@ const ButtonComponent = (props: Props) => {
     text,
     textColor,
     textStyles,
+    textFont,
     color,
     styles,
     onPress,
@@ -38,33 +40,39 @@ const ButtonComponent = (props: Props) => {
   } = props;
 
   return type === 'primary' ? (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[
-        globalStyles.button,
-        {
-          backgroundColor: color ?? appColors.primary,
-        },
-        styles,
-      ]}>
-      {icon && icon}
-      <TextComponent
-        text={text}
-        color={textColor ?? appColors.white}
-        styles={[
-          textStyles,
+    <View style={{alignItems: 'center'}}>
+      <TouchableOpacity
+        onPress={onPress}
+        style={[
+          globalStyles.button,
+          globalStyles.shadow,
           {
-            marginLeft: icon ? 12 : 0,
-            fontSize: 16,
+            backgroundColor: color ?? appColors.primary,
+            marginBottom: 17,
+            width: '90%',
           },
-        ]}
-        flex={icon && iconFlex === 'right' ? 1 : 0}
-        font={fontFamilies.medium}
-      />
-      {icon && iconFlex === 'right' && icon}
-    </TouchableOpacity>
+          styles,
+        ]}>
+        {icon && iconFlex === 'left' && icon}
+        <TextComponent
+          text={text}
+          color={textColor ?? appColors.white}
+          styles={[
+            textStyles,
+            {
+              marginLeft: icon ? 12 : 0,
+              fontSize: 16,
+              textAlign: 'center',
+            },
+          ]}
+          flex={icon && iconFlex === 'right' ? 1 : 0}
+          font={textFont ?? fontFamilies.medium}
+        />
+        {icon && iconFlex === 'right' && icon}
+      </TouchableOpacity>
+    </View>
   ) : (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <TextComponent
         text={text}
         color={type === 'link' ? appColors.primary : appColors.text}
