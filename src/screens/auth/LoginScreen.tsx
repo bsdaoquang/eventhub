@@ -1,11 +1,5 @@
-import {View, Text, Button} from 'react-native';
+import {ContainerComponent, TextComponent} from '@components/index';
 import React, {useState} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ButtonComponent, InputComponent, TextComponent} from '../../components';
-import {globalStyles} from '../../styles/globalStyles';
-import {Lock, LockCircle, Sms} from 'iconsax-react-native';
-import {appColors} from '../../constants/appColors';
-import ContainerComponent from '../../components/ContainerComponent';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +7,7 @@ const LoginScreen = () => {
 
   return (
     <ContainerComponent isImageBackground>
-      <TextComponent text="fafa" flex={0} />
+      <TextComponent text="fafa fasfs" flex={0} />
       {/* <InputComponent
         value={email}
         placeholder="Email"
