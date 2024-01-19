@@ -1,10 +1,10 @@
+import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
+import {StatusBar} from 'react-native';
 import AuthNavigator from './src/navigators/AuthNavigator';
-import {SplashScreen} from './src/screens';
-import {SafeAreaView, StatusBar} from 'react-native';
-import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import MainNavigator from './src/navigators/MainNavigator';
+import {SplashScreen} from './src/screens';
 
 const App = () => {
   const [isShowSplash, setIsShowSplash] = useState(true);
