@@ -43,13 +43,14 @@ const SignUpScreen = ({navigation}: any) => {
       (errorMessage &&
         (errorMessage.email ||
           errorMessage.password ||
-          errorMessage.confirmPassword))
+          errorMessage.confirmPassword) &&
+        (!values.email || !values.password || !values.confirmPassword))
     ) {
       setIsDisable(true);
     } else {
       setIsDisable(false);
     }
-  }, [errorMessage]);
+  }, [errorMessage, values]);
 
   const handleChangeValue = (key: string, value: string) => {
     const data: any = {...values};
@@ -98,7 +99,7 @@ const SignUpScreen = ({navigation}: any) => {
 
   const handleRegister = async () => {
     const api = `/verification`;
-
+    setIsLoading(true);
     try {
       const res = await authenticationAPI.HandleAuthentication(
         api,
@@ -107,8 +108,15 @@ const SignUpScreen = ({navigation}: any) => {
       );
 
       console.log(res);
+      setIsLoading(false);
+
+      navigation.navigate('Verification', {
+        code: res.data.code,
+        ...values,
+      });
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
