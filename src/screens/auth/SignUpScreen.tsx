@@ -43,8 +43,10 @@ const SignUpScreen = ({navigation}: any) => {
       (errorMessage &&
         (errorMessage.email ||
           errorMessage.password ||
-          errorMessage.confirmPassword) &&
-        (!values.email || !values.password || !values.confirmPassword))
+          errorMessage.confirmPassword)) ||
+      !values.email ||
+      !values.password ||
+      !values.confirmPassword
     ) {
       setIsDisable(true);
     } else {
@@ -107,7 +109,6 @@ const SignUpScreen = ({navigation}: any) => {
         'post',
       );
 
-      console.log(res);
       setIsLoading(false);
 
       navigation.navigate('Verification', {
