@@ -7,6 +7,7 @@ import {
   authSelector,
   removeAuth,
 } from '../../redux/reducers/authReducer';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,8 @@ const HomeScreen = () => {
       <Button
         title="Logout"
         onPress={async () => {
-          await AsyncStorage.setItem('auth', auth.email);
+          await AsyncStorage.clear();
+          await GoogleSignin.signOut();
           dispatch(removeAuth({}));
         }}
       />
