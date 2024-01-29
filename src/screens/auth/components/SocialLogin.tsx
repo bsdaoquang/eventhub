@@ -18,6 +18,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 GoogleSignin.configure({
   webClientId:
     '51183564123-pf81s6h2gnkmudbcnhe2j6ke2eapt6l1.apps.googleusercontent.com',
+  iosClientId:
+    '51183564123-ftijaqo23c9thm2kfe9ssgqq6p92ru72.apps.googleusercontent.com',
 });
 
 const SocialLogin = () => {
@@ -43,7 +45,6 @@ const SocialLogin = () => {
         'post',
       );
 
-      console.log(res.data);
       dispatch(addAuth(res.data));
 
       await AsyncStorage.setItem('auth', JSON.stringify(res.data));
