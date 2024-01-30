@@ -14,6 +14,7 @@ import authenticationAPI from '../../../apis/authApi';
 import {useDispatch} from 'react-redux';
 import {addAuth} from '../../../redux/reducers/authReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {LoginButton, LoginManager, Settings} from 'react-native-fbsdk-next';
 
 GoogleSignin.configure({
   webClientId:
@@ -22,9 +23,14 @@ GoogleSignin.configure({
     '51183564123-ftijaqo23c9thm2kfe9ssgqq6p92ru72.apps.googleusercontent.com',
 });
 
+Settings.setAppID('1073326807308750');
+
 const SocialLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+
+  const handleLoginWithFacebook = async () => {};
+
   const handleLoginWithGoogle = async () => {
     await GoogleSignin.hasPlayServices({
       showPlayServicesUpdateDialog: true,
@@ -74,7 +80,25 @@ const SocialLogin = () => {
         iconFlex="left"
         icon={<Google />}
       />
+      {/* <LoginButton
+        onLoginFinished={(error, result) => {
+          if (error) {
+            console.log(error);
+          } else if (result.isCancelled) {
+            console.log(`Cancel login`);
+          } else {
+            console.log(result);
+          }
+        }}
+      /> */}
       <ButtonComponent
+        onPress={() =>
+          LoginManager.logInWithPermissions(['public_profile'])
+            .then(result => {
+              console.log(result);
+            })
+            .catch(error => console.log(error))
+        }
         type="primary"
         color={appColors.white}
         textColor={appColors.text}

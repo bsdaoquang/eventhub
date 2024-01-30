@@ -1,19 +1,14 @@
-import {View, Text, Button} from 'react-native';
-import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  authReducer,
-  authSelector,
-  removeAuth,
-} from '../../redux/reducers/authReducer';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import React from 'react';
+import {Button, Text, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {authSelector, removeAuth} from '../../redux/reducers/authReducer';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
 
   const auth = useSelector(authSelector);
-  console.log(auth);
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
