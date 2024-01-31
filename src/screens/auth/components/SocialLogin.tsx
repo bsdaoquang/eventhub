@@ -14,7 +14,13 @@ import authenticationAPI from '../../../apis/authApi';
 import {useDispatch} from 'react-redux';
 import {addAuth} from '../../../redux/reducers/authReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Settings} from 'react-native-fbsdk-next';
+import {
+  Settings,
+  LoginManager,
+  Profile,
+  LoginButton,
+} from 'react-native-fbsdk-next';
+import {LoadingModal} from '../../../modals';
 
 GoogleSignin.configure({
   webClientId:
@@ -28,14 +34,13 @@ Settings.setAppID('684546690239906');
 const SocialLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
 
+  const api = `/google-signin`;
   const dispatch = useDispatch();
 
   const handleLoginWithGoogle = async () => {
     await GoogleSignin.hasPlayServices({
       showPlayServicesUpdateDialog: true,
     });
-
-    const api = `/google-signin`;
 
     try {
       await GoogleSignin.hasPlayServices();
@@ -54,6 +59,44 @@ const SocialLogin = () => {
 
       await AsyncStorage.setItem('auth', JSON.stringify(res.data));
     } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleLoginWithFacebook = async () => {
+    setIsLoading(true);
+    try {
+      const result = await LoginManager.logInWithPermissions([
+        'public_profile',
+      ]);
+
+      if (!result.isCancelled) {
+        const profile = await Profile.getCurrentProfile();
+
+        if (profile) {
+          const userInfo = {
+            name: profile.name,
+            givenName: profile.firstName,
+            familyName: profile.lastName,
+            email: profile.email,
+            photoUrl: profile.imageURL,
+          };
+
+          const res: any = await authenticationAPI.HandleAuthentication(
+            api,
+            userInfo,
+            'post',
+          );
+
+          dispatch(addAuth(res.data));
+
+          await AsyncStorage.setItem('auth', JSON.stringify(res.data));
+        }
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
@@ -79,15 +122,18 @@ const SocialLogin = () => {
         iconFlex="left"
         icon={<Google />}
       />
+
       <ButtonComponent
         type="primary"
         color={appColors.white}
         textColor={appColors.text}
         text="Login with Facebook"
+        onPress={handleLoginWithFacebook}
         textFont={fontFamilies.regular}
         iconFlex="left"
         icon={<Facebook />}
       />
+      <LoadingModal visible={isLoading} />
     </SectionComponent>
   );
 };

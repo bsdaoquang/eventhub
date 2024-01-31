@@ -7,6 +7,7 @@ import {
   authSelector,
   removeAuth,
 } from '../../redux/reducers/authReducer';
+import {LoginManager} from 'react-native-fbsdk-next';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const HomeScreen = () => {
@@ -23,6 +24,7 @@ const HomeScreen = () => {
         onPress={async () => {
           await AsyncStorage.clear();
           await GoogleSignin.signOut();
+          await LoginManager.logOut();
           dispatch(removeAuth({}));
         }}
       />
