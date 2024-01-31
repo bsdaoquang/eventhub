@@ -78,7 +78,7 @@ const SocialLogin = () => {
             name: profile.name,
             givenName: profile.firstName,
             familyName: profile.lastName,
-            email: profile.email,
+            email: profile.email ?? '',
             photoUrl: profile.imageURL,
           };
 
@@ -88,6 +88,7 @@ const SocialLogin = () => {
             'post',
           );
 
+          setIsLoading(false);
           dispatch(addAuth(res.data));
 
           await AsyncStorage.setItem('auth', JSON.stringify(res.data));
