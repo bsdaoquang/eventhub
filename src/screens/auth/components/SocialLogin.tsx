@@ -14,6 +14,7 @@ import authenticationAPI from '../../../apis/authApi';
 import {useDispatch} from 'react-redux';
 import {addAuth} from '../../../redux/reducers/authReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Settings} from 'react-native-fbsdk-next';
 
 GoogleSignin.configure({
   webClientId:
@@ -22,9 +23,13 @@ GoogleSignin.configure({
     '51183564123-ftijaqo23c9thm2kfe9ssgqq6p92ru72.apps.googleusercontent.com',
 });
 
+Settings.setAppID('684546690239906');
+
 const SocialLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
+
   const dispatch = useDispatch();
+
   const handleLoginWithGoogle = async () => {
     await GoogleSignin.hasPlayServices({
       showPlayServicesUpdateDialog: true,
