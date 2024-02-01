@@ -1,9 +1,13 @@
+import AddNewScreen from './AddNewScreen';
 import SplashScreen from './SplashScreen';
 import ForgotPassword from './auth/ForgotPassword';
 import LoginScreen from './auth/LoginScreen';
 import SignUpScreen from './auth/SignUpScreen';
 import Verification from './auth/Verification';
+import EventsScreen from './events/EventsScreen';
 import HomeScreen from './home/HomeScreen';
+import MapScreen from './maps/MapScreen';
+import ProfileScreen from './profiles/ProfileScreen';
 
 export {
   HomeScreen,
@@ -12,4 +16,8 @@ export {
   Verification,
   ForgotPassword,
   SignUpScreen,
+  AddNewScreen,
+  EventsScreen,
+  MapScreen,
+  ProfileScreen,
 };
