@@ -10,7 +10,6 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
 
   const auth = useSelector(authSelector);
-  console.log(auth);
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

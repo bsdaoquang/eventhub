@@ -27,7 +27,7 @@ GoogleSignin.configure({
   iosClientId:
     '51183564123-ftijaqo23c9thm2kfe9ssgqq6p92ru72.apps.googleusercontent.com',
 });
-Settings.setAppID('897310838757835');
+Settings.setAppID('684546690239906');
 
 const SocialLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
