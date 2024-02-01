@@ -1,5 +1,9 @@
-import {View, Text} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
+import authenticationAPI from '../../../apis/authApi';
+import {Facebook, Google} from '../../../assets/svgs';
 import {
   ButtonComponent,
   SectionComponent,
@@ -8,19 +12,14 @@ import {
 } from '../../../components';
 import {appColors} from '../../../constants/appColors';
 import {fontFamilies} from '../../../constants/fontFamilies';
-import {Facebook, Google} from '../../../assets/svgs';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import authenticationAPI from '../../../apis/authApi';
-import {useDispatch} from 'react-redux';
+import {LoadingModal} from '../../../modals';
 import {addAuth} from '../../../redux/reducers/authReducer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Settings,
   LoginManager,
   Profile,
   LoginButton,
 } from 'react-native-fbsdk-next';
-import {LoadingModal} from '../../../modals';
 
 GoogleSignin.configure({
   webClientId:
@@ -28,8 +27,7 @@ GoogleSignin.configure({
   iosClientId:
     '51183564123-ftijaqo23c9thm2kfe9ssgqq6p92ru72.apps.googleusercontent.com',
 });
-
-Settings.setAppID('684546690239906');
+Settings.setAppID('897310838757835');
 
 const SocialLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -44,9 +42,7 @@ const SocialLogin = () => {
 
     try {
       await GoogleSignin.hasPlayServices();
-
       const userInfo = await GoogleSignin.signIn();
-
       const user = userInfo.user;
 
       const res: any = await authenticationAPI.HandleAuthentication(
@@ -64,40 +60,40 @@ const SocialLogin = () => {
   };
 
   const handleLoginWithFacebook = async () => {
-    setIsLoading(true);
     try {
       const result = await LoginManager.logInWithPermissions([
         'public_profile',
       ]);
 
-      if (!result.isCancelled) {
+      if (result.isCancelled) {
+        console.log('Login cancel');
+      } else {
         const profile = await Profile.getCurrentProfile();
 
         if (profile) {
-          const userInfo = {
+          setIsLoading(true);
+          const data = {
             name: profile.name,
             givenName: profile.firstName,
             familyName: profile.lastName,
-            email: profile.email ?? '',
+            email: profile.userID,
             photoUrl: profile.imageURL,
           };
 
           const res: any = await authenticationAPI.HandleAuthentication(
             api,
-            userInfo,
+            data,
             'post',
           );
 
-          setIsLoading(false);
           dispatch(addAuth(res.data));
 
           await AsyncStorage.setItem('auth', JSON.stringify(res.data));
+
+          setIsLoading(false);
         }
       }
-
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
       console.log(error);
     }
   };
@@ -129,8 +125,8 @@ const SocialLogin = () => {
         color={appColors.white}
         textColor={appColors.text}
         text="Login with Facebook"
-        onPress={handleLoginWithFacebook}
         textFont={fontFamilies.regular}
+        onPress={handleLoginWithFacebook}
         iconFlex="left"
         icon={<Facebook />}
       />
