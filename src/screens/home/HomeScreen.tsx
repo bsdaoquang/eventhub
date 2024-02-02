@@ -15,7 +15,7 @@ import {ArrowDown, HambergerMenu, Notification} from 'iconsax-react-native';
 import {fontFamilies} from '../../constants/fontFamilies';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
 
   const auth = useSelector(authSelector);
@@ -34,7 +34,7 @@ const HomeScreen = () => {
           paddingHorizontal: 16,
         }}>
         <RowComponent>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <HambergerMenu size={24} color={appColors.white} />
           </TouchableOpacity>
           <View style={[{flex: 1, alignItems: 'center'}]}>
