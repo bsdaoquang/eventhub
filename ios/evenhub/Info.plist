@@ -27,20 +27,20 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb684546690239906</string>
+				<string>fb897310838757835</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
-	<string>684546690239906</string>
+	<string>897310838757835</string>
 	<key>FacebookClientToken</key>
-	<string>934d2de700b6ac9aa8c77c1caedda420</string>
+	<string>c3139cdb821ce5b4a342fa169796ea2c</string>
 	<key>FacebookDisplayName</key>
 	<string>EventHub</string>
 	<key>GIDClientID</key>
-	<string>Y51183564123-ftijaqo23c9thm2kfe9ssgqq6p92ru72.apps.googleusercontent.com</string>
+	<string>51183564123-ftijaqo23c9thm2kfe9ssgqq6p92ru72.apps.googleusercontent.com</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>

@@ -1,6 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import React, {useState} from 'react';
+import {
+  LoginButton,
+  LoginManager,
+  Profile,
+  Settings,
+} from 'react-native-fbsdk-next';
 import {useDispatch} from 'react-redux';
 import authenticationAPI from '../../../apis/authApi';
 import {Facebook, Google} from '../../../assets/svgs';
@@ -14,12 +20,6 @@ import {appColors} from '../../../constants/appColors';
 import {fontFamilies} from '../../../constants/fontFamilies';
 import {LoadingModal} from '../../../modals';
 import {addAuth} from '../../../redux/reducers/authReducer';
-import {
-  Settings,
-  LoginManager,
-  Profile,
-  LoginButton,
-} from 'react-native-fbsdk-next';
 
 GoogleSignin.configure({
   webClientId:
@@ -77,7 +77,7 @@ const SocialLogin = () => {
             givenName: profile.firstName,
             familyName: profile.lastName,
             email: profile.userID,
-            photoUrl: profile.imageURL,
+            photo: profile.imageURL,
           };
 
           const res: any = await authenticationAPI.HandleAuthentication(
