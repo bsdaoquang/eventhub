@@ -1,4 +1,5 @@
 import ButtonComponent from './ButtonComponent';
+import CategoriesList from './CategoriesList';
 import CircleComponent from './CircleComponent';
 import ContainerComponent from './ContainerComponent';
 import InputComponent from './InputComponent';
@@ -16,4 +17,5 @@ export {
   ContainerComponent,
   RowComponent,
   CircleComponent,
+  CategoriesList,
 };
