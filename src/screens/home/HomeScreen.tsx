@@ -5,14 +5,24 @@ import {
   Sort,
 } from 'iconsax-react-native';
 import React from 'react';
-import {Platform, StatusBar, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  Platform,
+  ScrollView,
+  StatusBar,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   CategoriesList,
   CircleComponent,
+  EventItem,
   RowComponent,
+  SectionComponent,
   SpaceComponent,
+  TagBarComponent,
   TextComponent,
 } from '../../components';
 import {appColors} from '../../constants/appColors';
@@ -132,12 +142,21 @@ const HomeScreen = ({navigation}: any) => {
           <CategoriesList isColor />
         </View>
       </View>
-      <View
+      <ScrollView
         style={[
           {
             flex: 1,
+            paddingTop: 40,
           },
-        ]}></View>
+        ]}>
+        <TagBarComponent title="Upcoming Events" onPress={() => {}} />
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={Array.from({length: 5})}
+          renderItem={({item}) => <EventItem type="card" item={item} />}
+        />
+      </ScrollView>
     </View>
   );
 };
