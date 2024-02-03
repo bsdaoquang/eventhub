@@ -10,8 +10,19 @@ import {useDispatch, useSelector} from 'react-redux';
 import {authSelector} from '../../redux/reducers/authReducer';
 import {globalStyles} from '../../styles/globalStyles';
 import {appColors} from '../../constants/appColors';
-import {CircleComponent, RowComponent, TextComponent} from '../../components';
-import {ArrowDown, HambergerMenu, Notification} from 'iconsax-react-native';
+import {
+  CircleComponent,
+  RowComponent,
+  SpaceComponent,
+  TextComponent,
+} from '../../components';
+import {
+  ArrowDown,
+  HambergerMenu,
+  Notification,
+  SearchNormal1,
+  Sort,
+} from 'iconsax-react-native';
 import {fontFamilies} from '../../constants/fontFamilies';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -77,6 +88,49 @@ const HomeScreen = ({navigation}: any) => {
               />
             </View>
           </CircleComponent>
+        </RowComponent>
+        <SpaceComponent height={24} />
+        <RowComponent>
+          <RowComponent
+            styles={{flex: 1}}
+            onPress={() =>
+              navigation.navigate('SearchEvents', {
+                isFilter: false,
+              })
+            }>
+            <SearchNormal1
+              variant="TwoTone"
+              size={22}
+              color={appColors.white}
+            />
+            <View
+              style={{
+                width: 1,
+                height: 18,
+                marginHorizontal: 12,
+                backgroundColor: '#A29EF0',
+              }}
+            />
+            <TextComponent text="Search..." color={`#A29EF0`} flex={1} />
+          </RowComponent>
+          <RowComponent
+            onPress={() =>
+              navigation.navigate('SearchEvents', {
+                isFilter: true,
+              })
+            }
+            styles={{
+              backgroundColor: '#5D56F3',
+              paddingHorizontal: 12,
+              paddingVertical: 8,
+              borderRadius: 100,
+            }}>
+            <CircleComponent size={19.3} color={`#A29EF0`}>
+              <Sort size={12} color={appColors.primary} />
+            </CircleComponent>
+            <SpaceComponent width={8} />
+            <TextComponent text="Filters" color={appColors.white} />
+          </RowComponent>
         </RowComponent>
       </View>
       <View

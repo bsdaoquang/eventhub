@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {HomeScreen} from '../screens';
+import {HomeScreen, SearchEvents} from '../screens';
 
 const ExploreNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -10,6 +10,7 @@ const ExploreNavigator = () => {
         headerShown: false,
       }}>
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="SearchEvents" component={SearchEvents} />
     </Stack.Navigator>
   );
 };
