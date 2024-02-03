@@ -56,7 +56,10 @@ const TabNavigator = () => {
               icon = (
                 <CircleComponent
                   size={52}
-                  styles={{marginTop: Platform.OS === 'ios' ? -50 : -60}}>
+                  styles={[
+                    globalStyles.shadow,
+                    {marginTop: Platform.OS === 'ios' ? -50 : -60},
+                  ]}>
                   <AddSquare size={24} color={appColors.white} variant="Bold" />
                 </CircleComponent>
               );

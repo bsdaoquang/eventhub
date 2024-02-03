@@ -1,12 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import React, {useState} from 'react';
-import {
-  LoginButton,
-  LoginManager,
-  Profile,
-  Settings,
-} from 'react-native-fbsdk-next';
+import {LoginManager, Profile, Settings} from 'react-native-fbsdk-next';
 import {useDispatch} from 'react-redux';
 import authenticationAPI from '../../../apis/authApi';
 import {Facebook, Google} from '../../../assets/svgs';
