@@ -1,7 +1,9 @@
 import React from 'react';
 import {
+  FlatList,
   Platform,
   SafeAreaView,
+  ScrollView,
   StatusBar,
   TouchableOpacity,
   View,
@@ -13,8 +15,11 @@ import {appColors} from '../../constants/appColors';
 import {
   CategoriesList,
   CircleComponent,
+  EventItem,
   RowComponent,
+  SectionComponent,
   SpaceComponent,
+  TabBarComponent,
   TagComponent,
   TextComponent,
 } from '../../components';
@@ -141,12 +146,25 @@ const HomeScreen = ({navigation}: any) => {
           <CategoriesList isFill />
         </View>
       </View>
-      <View
+      <ScrollView
+        showsVerticalScrollIndicator={false}
         style={[
           {
             flex: 1,
+            marginTop: 16,
           },
-        ]}></View>
+        ]}>
+        <SectionComponent styles={{paddingHorizontal: 0, paddingTop: 20}}>
+          <TabBarComponent title="Upcoming Events" onPress={() => {}} />
+          <FlatList
+            horizontal
+            data={Array.from({length: 5})}
+            renderItem={({item, index}) => (
+              <EventItem key={`event${index}`} item={item} type="card" />
+            )}
+          />
+        </SectionComponent>
+      </ScrollView>
     </View>
   );
 };
