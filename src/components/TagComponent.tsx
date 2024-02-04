@@ -3,6 +3,7 @@ import {StyleProp, TouchableOpacity, ViewStyle} from 'react-native';
 import {TextComponent} from '.';
 import {globalStyles} from '../styles/globalStyles';
 import {appColors} from '../constants/appColors';
+import {fontFamilies} from '../constants/fontFamilies';
 
 interface Props {
   onPress: () => void;
@@ -29,6 +30,7 @@ const TagComponent = (props: Props) => {
       ]}>
       {icon && icon}
       <TextComponent
+        font={fontFamilies.medium}
         text={label}
         styles={{marginLeft: icon ? 8 : 0}}
         color={
