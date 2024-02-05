@@ -70,6 +70,7 @@ const TabNavigator = () => {
         tabBarIconStyle: {
           marginTop: 8,
         },
+        tabBarLabelPosition: 'below-icon',
         tabBarLabel({focused}) {
           return route.name === 'Add' ? null : (
             <TextComponent

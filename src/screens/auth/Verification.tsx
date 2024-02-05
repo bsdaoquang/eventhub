@@ -27,7 +27,6 @@ const Verification = ({navigation, route}: any) => {
   const [limit, setLimit] = useState(120);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
   const ref1 = useRef<any>();
   const ref2 = useRef<any>();
   const ref3 = useRef<any>();
