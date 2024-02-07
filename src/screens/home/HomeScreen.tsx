@@ -215,7 +215,7 @@ const HomeScreen = ({navigation}: any) => {
           </ImageBackground>
         </SectionComponent>
         <SectionComponent styles={{paddingHorizontal: 0, paddingTop: 24}}>
-          <TabBarComponent title="Upcoming Events" onPress={() => {}} />
+          <TabBarComponent title="Nearby You" onPress={() => {}} />
           <FlatList
             showsHorizontalScrollIndicator={false}
             horizontal
