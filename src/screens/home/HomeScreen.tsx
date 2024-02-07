@@ -170,7 +170,7 @@ const HomeScreen = ({navigation}: any) => {
         style={[
           {
             flex: 1,
-            marginTop: 16,
+            marginTop: Platform.OS === 'ios' ? 22 : 18,
           },
         ]}>
         <SectionComponent styles={{paddingHorizontal: 0, paddingTop: 24}}>
