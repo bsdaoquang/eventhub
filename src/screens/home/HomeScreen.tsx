@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   FlatList,
   ImageBackground,
+  PermissionsAndroid,
   Platform,
   SafeAreaView,
   ScrollView,
@@ -35,11 +36,40 @@ import {
 } from 'iconsax-react-native';
 import {fontFamilies} from '../../constants/fontFamilies';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import GeoLocation, {
+  GeolocationResponse,
+} from '@react-native-community/geolocation';
 
 const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
 
   const auth = useSelector(authSelector);
+
+  useEffect(() => {
+    checkPermission();
+  }, []);
+
+  const checkPermission = async () => {
+    const result = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    );
+
+    if (result === 'granted') {
+      GeoLocation.getCurrentPosition(async (res: GeolocationResponse) => {
+        await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${res.coords.latitude}&lon=${res.coords.longitude}&appid=d6ebcacf045fbade0edd78f1023c50bb
+          &units=metric`,
+        )
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+          })
+          .catch(error => console.log(error));
+      });
+    } else {
+      console.log(result);
+    }
+  };
 
   const itemEvent = {
     title: 'International Band Music Concert',
