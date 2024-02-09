@@ -22,6 +22,8 @@ DerivedData
 *.xcuserstate
 ios/.xcode.env.local
 
+
+
 # Android/IntelliJ
 #
 build/
@@ -39,6 +41,9 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
+
+#
+src/constants/appInfos
 
 # fastlane
 #
