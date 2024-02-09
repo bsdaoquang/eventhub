@@ -208,7 +208,9 @@ const EventDetail = ({navigation, route}: any) => {
             </SectionComponent>
             <TabBarComponent title="About Event" />
             <SectionComponent>
-              <TextComponent text={item.description} />
+              <TextComponent
+                text={`Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis necessitatibus ratione asperiores odit exercitationem repellat aliquam at officiis, quasi natus? Consequatur, amet! Iusto velit vitae quidem autem maxime qui exercitationem.`}
+              />
             </SectionComponent>
           </View>
         </ScrollView>
