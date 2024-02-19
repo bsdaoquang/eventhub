@@ -1,21 +1,23 @@
+import GeoLocation from '@react-native-community/geolocation';
+import axios from 'axios';
+import {
+  HambergerMenu,
+  Notification,
+  SearchNormal1,
+  Sort,
+} from 'iconsax-react-native';
 import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   ImageBackground,
   Platform,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {authSelector} from '../../redux/reducers/authReducer';
-import {globalStyles} from '../../styles/globalStyles';
-import {appColors} from '../../constants/appColors';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
-  ButtonComponent,
-  CardComponent,
   CategoriesList,
   CircleComponent,
   EventItem,
@@ -26,19 +28,10 @@ import {
   TagComponent,
   TextComponent,
 } from '../../components';
-import {
-  ArrowDown,
-  HambergerMenu,
-  Notification,
-  SearchNormal1,
-  Sort,
-} from 'iconsax-react-native';
+import {appColors} from '../../constants/appColors';
 import {fontFamilies} from '../../constants/fontFamilies';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import GeoLocation from '@react-native-community/geolocation';
-import {appInfo} from '../../constants/appInfos';
-import axios from 'axios';
 import {AddressModel} from '../../models/AddressModel';
+import {globalStyles} from '../../styles/globalStyles';
 
 const HomeScreen = ({navigation}: any) => {
   const [addressInfo, setAddressInfo] = useState<AddressModel>();
