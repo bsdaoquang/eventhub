@@ -1,21 +1,22 @@
-import React from 'react';
+import {
+  HambergerMenu,
+  Notification,
+  SearchNormal1,
+  Sort,
+} from 'iconsax-react-native';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   ImageBackground,
   Platform,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   TouchableOpacity,
   View,
 } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
-import {authSelector} from '../../redux/reducers/authReducer';
-import {globalStyles} from '../../styles/globalStyles';
-import {appColors} from '../../constants/appColors';
 import {
-  ButtonComponent,
-  CardComponent,
   CategoriesList,
   CircleComponent,
   EventItem,
@@ -26,20 +27,46 @@ import {
   TagComponent,
   TextComponent,
 } from '../../components';
-import {
-  ArrowDown,
-  HambergerMenu,
-  Notification,
-  SearchNormal1,
-  Sort,
-} from 'iconsax-react-native';
+import {appColors} from '../../constants/appColors';
 import {fontFamilies} from '../../constants/fontFamilies';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {authSelector} from '../../redux/reducers/authReducer';
+import {globalStyles} from '../../styles/globalStyles';
+import GeoLocation from '@react-native-community/geolocation';
+import axios from 'axios';
+import {AddressModel} from '../../models/AddressModel';
 
 const HomeScreen = ({navigation}: any) => {
+  const [currentLocation, setCurrentLocation] = useState<AddressModel>();
+
   const dispatch = useDispatch();
 
   const auth = useSelector(authSelector);
+
+  useEffect(() => {
+    GeoLocation.getCurrentPosition(position => {
+      if (position.coords) {
+        reverseGeoCode({
+          lat: position.coords.latitude,
+          long: position.coords.longitude,
+        });
+      }
+    });
+  }, []);
+
+  const reverseGeoCode = async ({lat, long}: {lat: number; long: number}) => {
+    const api = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat},${long}&lang=vi-VI&apiKey=zCDIlA5ytRuEe3YS9YrJlzAGjTkxsy4S6mJtq7ZpkGU`;
+
+    try {
+      const res = await axios(api);
+
+      if (res && res.status === 200 && res.data) {
+        const items = res.data.items;
+        setCurrentLocation(items[0]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const itemEvent = {
     title: 'International Band Music Concert',
@@ -87,13 +114,15 @@ const HomeScreen = ({navigation}: any) => {
                   color={appColors.white}
                 />
               </RowComponent>
-              <TextComponent
-                text="New York, USA"
-                flex={0}
-                color={appColors.white}
-                font={fontFamilies.medium}
-                size={13}
-              />
+              {currentLocation && (
+                <TextComponent
+                  text={`${currentLocation.address.city}, ${currentLocation.address.countryName}`}
+                  flex={0}
+                  color={appColors.white}
+                  font={fontFamilies.medium}
+                  size={13}
+                />
+              )}
             </View>
 
             <CircleComponent color="#524CE0" size={36}>

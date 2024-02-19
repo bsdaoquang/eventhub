@@ -56,8 +56,10 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Tìm sự kiện đang diễn ra gần bạn</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Tìm sự kiện đang diễn ra gần bạn</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AirbnbCereal_W_Bd.otf</string>
