@@ -2,6 +2,7 @@ import AvatarGroup from './AvatarGroup';
 import ButtonComponent from './ButtonComponent';
 import CardComponent from './CardComponent';
 import CategoriesList from './CategoriesList';
+import ChoiceLocation from './ChoiceLocation';
 import CircleComponent from './CircleComponent';
 import ContainerComponent from './ContainerComponent';
 import EventItem from './EventItem';
@@ -28,4 +29,5 @@ export {
   EventItem,
   CardComponent,
   AvatarGroup,
+  ChoiceLocation,
 };
