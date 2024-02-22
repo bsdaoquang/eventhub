@@ -116,7 +116,7 @@ const HomeScreen = ({navigation}: any) => {
               </RowComponent>
               {currentLocation && (
                 <TextComponent
-                  text={`${currentLocation.address.city}, ${currentLocation.address.countryName}`}
+                  text={`${currentLocation.address.city}, ${currentLocation.address.county}`}
                   flex={0}
                   color={appColors.white}
                   font={fontFamilies.medium}
