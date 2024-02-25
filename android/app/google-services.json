@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "416703257608",
+    "project_id": "evenhub-f8c6e",
+    "storage_bucket": "evenhub-f8c6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416703257608:android:a9aa3e10cfa7ad6df085bd",
+        "android_client_info": {
+          "package_name": "com.evenhub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoiZSCK0by-VglePibmstqzSjKCaRhcrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
