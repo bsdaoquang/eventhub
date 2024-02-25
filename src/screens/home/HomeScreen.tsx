@@ -34,7 +34,9 @@ import {globalStyles} from '../../styles/globalStyles';
 import GeoLocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import {AddressModel} from '../../models/AddressModel';
+import Geocoder from 'react-native-geocoding';
 
+Geocoder.init(process.env.MAP_API_KEY as string);
 const HomeScreen = ({navigation}: any) => {
   const [currentLocation, setCurrentLocation] = useState<AddressModel>();
 

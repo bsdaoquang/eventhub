@@ -65,6 +65,16 @@ const AddNewScreen = () => {
           value={eventData.description}
           onChange={val => handleChangeValue('description', val)}
         />
+        <InputComponent
+          placeholder="Title Address"
+          multiline
+          numberOfLine={3}
+          allowClear
+          value={eventData.location.title}
+          onChange={val =>
+            handleChangeValue('location', {...eventData.location, title: val})
+          }
+        />
         <ChoiceLocation />
       </SectionComponent>
       <SectionComponent>
