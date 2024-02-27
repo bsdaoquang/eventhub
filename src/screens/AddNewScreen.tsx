@@ -1,5 +1,5 @@
 import {View, Text} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ButtonComponent,
   ChoiceLocation,
@@ -15,6 +15,7 @@ import {
 import {useSelector} from 'react-redux';
 import {authSelector} from '../redux/reducers/authReducer';
 import userAPI from '../apis/userApi';
+import {SelectModel} from '../models/SelectModel';
 
 const initValues = {
   title: '',
@@ -24,7 +25,7 @@ const initValues = {
     address: '',
   },
   imageUrl: '',
-  users: [''],
+  users: [],
   authorId: '',
   startAt: Date.now(),
   endAt: Date.now(),
@@ -38,12 +39,41 @@ const AddNewScreen = () => {
     ...initValues,
     authorId: auth.id,
   });
-
-  const handleChangeValue = (key: string, value: string | Date) => {
+  const [usersSelects, setUsersSelects] = useState<SelectModel[]>([]);
+  const handleChangeValue = (key: string, value: string | Date | string[]) => {
     const items = {...eventData};
     items[`${key}`] = value;
 
     setEventData(items);
+  };
+
+  useEffect(() => {
+    handleGetAllUsers();
+  }, []);
+
+  const handleGetAllUsers = async () => {
+    const api = `/get-all`;
+
+    try {
+      const res: any = await userAPI.HandleUser(api);
+
+      if (res && res.data) {
+        const items: SelectModel[] = [];
+
+        res.data.forEach(
+          (item: any) =>
+            item.email &&
+            items.push({
+              label: item.email,
+              value: item.id,
+            }),
+        );
+
+        setUsersSelects(items);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleAddEvent = async () => {
@@ -96,9 +126,12 @@ const AddNewScreen = () => {
 
         <DropdownPicker
           label="Invited users"
-          values={[]}
-          onSelect={(val: string) => console.log(val)}
-          selected={undefined}
+          values={usersSelects}
+          onSelect={(val: string | string[]) =>
+            handleChangeValue('users', val as string[])
+          }
+          selected={eventData.users}
+          multible
         />
         <InputComponent
           placeholder="Title Address"
