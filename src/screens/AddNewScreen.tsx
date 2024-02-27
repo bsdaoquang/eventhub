@@ -5,6 +5,7 @@ import {
   ChoiceLocation,
   ContainerComponent,
   DateTimePicker,
+  DropdownPicker,
   InputComponent,
   RowComponent,
   SectionComponent,
@@ -13,6 +14,7 @@ import {
 } from '../components';
 import {useSelector} from 'react-redux';
 import {authSelector} from '../redux/reducers/authReducer';
+import userAPI from '../apis/userApi';
 
 const initValues = {
   title: '',
@@ -45,7 +47,8 @@ const AddNewScreen = () => {
   };
 
   const handleAddEvent = async () => {
-    console.log(eventData);
+    const res = await userAPI.HandleUser('/get-all');
+    console.log(res);
   };
 
   return (
@@ -89,6 +92,13 @@ const AddNewScreen = () => {
           type="date"
           onSelect={val => handleChangeValue('date', val)}
           selected={eventData.date}
+        />
+
+        <DropdownPicker
+          label="Invited users"
+          values={[]}
+          onSelect={(val: string) => console.log(val)}
+          selected={undefined}
         />
         <InputComponent
           placeholder="Title Address"
