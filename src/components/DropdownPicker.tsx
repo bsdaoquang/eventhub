@@ -39,10 +39,10 @@ const DropdownPicker = (props: Props) => {
   }, [isVisibleModalize]);
 
   useEffect(() => {
-    if (isVisibleModalize && selected && selected?.length > 0) {
-      setSelectedItems(selected as string[]);
+    if (isVisibleModalize && selected) {
+      setSelectedItems(multible ? (selected as string[]) : []);
     }
-  }, [isVisibleModalize, selected]);
+  }, [isVisibleModalize, selected, multible]);
 
   const handleSelectItem = (id: string) => {
     if (selectedItems.includes(id)) {
@@ -65,7 +65,12 @@ const DropdownPicker = (props: Props) => {
 
     return item ? (
       <RowComponent key={id} styles={[localStyles.selectedItem]}>
-        <TextComponent text={item.label} color={appColors.primary} />
+        <TextComponent
+          text={`${
+            item.label.includes('@') ? item.label.split('@')[0] : item.label
+          }`}
+          color={appColors.primary}
+        />
         <SpaceComponent width={8} />
         <TouchableOpacity
           onPress={() => {
@@ -86,7 +91,10 @@ const DropdownPicker = (props: Props) => {
         onPress={
           multible
             ? () => handleSelectItem(item.value)
-            : () => onSelect(item.value)
+            : () => {
+                onSelect(item.value);
+                modalieRef.current?.close();
+              }
         }
         key={item.value}
         styles={[localStyles.listItem]}>
@@ -119,14 +127,28 @@ const DropdownPicker = (props: Props) => {
     <View style={{marginBottom: 8}}>
       {label && <TextComponent text={label} styles={{marginBottom: 8}} />}
       <RowComponent
-        styles={[globalStyles.inputContainer]}
+        styles={[globalStyles.inputContainer, {alignItems: 'flex-start'}]}
         onPress={() => setIsVisibleModalize(true)}>
         <RowComponent styles={{flex: 1, flexWrap: 'wrap'}}>
-          {selectedItems.length > 0 ? (
-            selectedItems.map(item => renderSelectedItem(item))
+          {selected ? (
+            selectedItems.length > 0 ? (
+              selectedItems.map(item => renderSelectedItem(item))
+            ) : (
+              <TextComponent
+                text={
+                  values.find(element => element.value === selected)?.label ??
+                  ''
+                }
+              />
+            )
           ) : (
             <TextComponent text="Select" />
           )}
+          {/* {selected ? selectedItems.length > 0 ? (
+            
+          ) : (
+            
+          )} */}
         </RowComponent>
         <ArrowDown2 size={22} color={appColors.gray} />
       </RowComponent>

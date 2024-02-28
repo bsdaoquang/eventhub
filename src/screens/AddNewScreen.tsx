@@ -1,7 +1,8 @@
-import {View, Text} from 'react-native';
+import {View, Text, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   ButtonComponent,
+  ButtonImagePicker,
   ChoiceLocation,
   ContainerComponent,
   DateTimePicker,
@@ -16,13 +17,18 @@ import {useSelector} from 'react-redux';
 import {authSelector} from '../redux/reducers/authReducer';
 import userAPI from '../apis/userApi';
 import {SelectModel} from '../models/SelectModel';
+import {ImageOrVideo} from 'react-native-image-crop-picker';
+import {Validate} from '../utils/validate';
+import {appColors} from '../constants/appColors';
 
 const initValues = {
   title: '',
   description: '',
-  location: {
-    title: '',
-    address: '',
+  locationTitle: '',
+  locationAddress: '',
+  position: {
+    lat: '',
+    long: '',
   },
   imageUrl: '',
   users: [],
@@ -30,6 +36,7 @@ const initValues = {
   startAt: Date.now(),
   endAt: Date.now(),
   date: Date.now(),
+  price: '',
 };
 
 const AddNewScreen = () => {
@@ -46,10 +53,37 @@ const AddNewScreen = () => {
 
     setEventData(items);
   };
+  const [fileSelected, setFileSelected] = useState<any>();
+  const [errorText, setErrorText] = useState<string[]>([]);
+
+  const categories = [
+    {
+      value: 'sports',
+      label: 'Sports',
+    },
+    {
+      value: 'mucsic',
+      label: 'Music',
+    },
+    {
+      value: 'food',
+      label: 'Food',
+    },
+    {
+      value: 'art',
+      label: 'Art',
+    },
+  ];
 
   useEffect(() => {
     handleGetAllUsers();
   }, []);
+
+  useEffect(() => {
+    const errors = Validate.Event(eventData);
+
+    setErrorText(errors);
+  }, [eventData]);
 
   const handleGetAllUsers = async () => {
     const api = `/get-all`;
@@ -77,8 +111,18 @@ const AddNewScreen = () => {
   };
 
   const handleAddEvent = async () => {
-    const res = await userAPI.HandleUser('/get-all');
-    console.log(res);
+    const validateEvent = Validate.Event(eventData);
+    if (validateEvent.length > 0) {
+      setErrorText(validateEvent);
+    } else {
+      setErrorText([]);
+      console.log('OK');
+    }
+  };
+
+  const handleFileSelected = (val: ImageOrVideo) => {
+    setFileSelected(val);
+    handleChangeValue('imageUrl', val.path);
   };
 
   return (
@@ -87,6 +131,24 @@ const AddNewScreen = () => {
         <TextComponent text="Add new" title />
       </SectionComponent>
       <SectionComponent>
+        {eventData.imageUrl ? (
+          <Image
+            source={{
+              uri: eventData.imageUrl,
+            }}
+            style={{width: '100%', height: 250, marginBottom: 12}}
+            resizeMode="cover"
+          />
+        ) : (
+          <></>
+        )}
+        <ButtonImagePicker
+          onSelect={(val: any) =>
+            val.type === 'url'
+              ? handleChangeValue('imageUrl', val.value as string)
+              : handleFileSelected(val.value)
+          }
+        />
         <InputComponent
           placeholder="Title"
           value={eventData.title}
@@ -100,6 +162,12 @@ const AddNewScreen = () => {
           allowClear
           value={eventData.description}
           onChange={val => handleChangeValue('description', val)}
+        />
+        <DropdownPicker
+          label="Category"
+          values={categories}
+          selected={eventData.category}
+          onSelect={val => handleChangeValue('category', val)}
         />
         <RowComponent>
           <DateTimePicker
@@ -136,15 +204,38 @@ const AddNewScreen = () => {
         <InputComponent
           placeholder="Title Address"
           allowClear
-          value={eventData.location.title}
-          onChange={val =>
-            handleChangeValue('location', {...eventData.location, title: val})
-          }
+          value={eventData.locationTitle}
+          onChange={val => handleChangeValue('locationTitle', val)}
         />
-        <ChoiceLocation />
+        <ChoiceLocation
+          onSelect={val => {
+            handleChangeValue('locationAddress', val.address);
+            handleChangeValue('position', val.postion);
+          }}
+        />
+        <InputComponent
+          placeholder="Price"
+          allowClear
+          type="number-pad"
+          value={eventData.price}
+          onChange={val => handleChangeValue('price', val)}
+        />
       </SectionComponent>
+      {errorText.length > 0 && (
+        <SectionComponent>
+          {errorText.map((text, index) => (
+            <TextComponent
+              key={`error${index}`}
+              text={text}
+              color={appColors.danger}
+              styles={{marginBottom: 12}}
+            />
+          ))}
+        </SectionComponent>
+      )}
       <SectionComponent>
         <ButtonComponent
+          disable={errorText.length > 0}
           text="Add New"
           onPress={handleAddEvent}
           type="primary"
