@@ -10,17 +10,14 @@ export class Validate {
     return val.length >= 6;
   };
 
-  static Event = (data: any) => {
-    const errors: string[] = [];
-
-    for (const i in data) {
-      if (i !== 'description' && i !== 'users') {
-        if (!data[i]) {
-          errors.push(`${i} required!!!`);
-        }
+  static EventValidation = (data: any) => {
+    const mess: string[] = [];
+    Object.keys(data).forEach(key => {
+      if (key !== 'description' && key !== 'users') {
+        !data[`${key}`] && mess.push(`${key} is required!!!`);
       }
-    }
+    });
 
-    return errors;
+    return mess;
   };
 }

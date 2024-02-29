@@ -157,7 +157,7 @@ const ModalLocation = (props: Props) => {
           <MapView
             style={{
               width: appInfo.sizes.WIDTH,
-              height: 500,
+              height: appInfo.sizes.HEIGHT - 220,
               marginVertical: 40,
               zIndex: -1,
             }}
@@ -178,18 +178,27 @@ const ModalLocation = (props: Props) => {
             mapType="standard"
           />
         )}
-        <ButtonComponent
-          text="Confirm"
-          onPress={() => {
-            onSelect({
-              address: addressSelected,
-              postion: currentLocation,
-            });
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 10,
+            left: 0,
+            right: 0,
+          }}>
+          <ButtonComponent
+            styles={{marginBottom: 40}}
+            text="Confirm"
+            onPress={() => {
+              onSelect({
+                address: addressSelected,
+                postion: currentLocation,
+              });
 
-            onClose();
-          }}
-          type="primary"
-        />
+              onClose();
+            }}
+            type="primary"
+          />
+        </View>
       </View>
     </Modal>
   );

@@ -20,6 +20,9 @@ import {SelectModel} from '../models/SelectModel';
 import {ImageOrVideo} from 'react-native-image-crop-picker';
 import {Validate} from '../utils/validate';
 import {appColors} from '../constants/appColors';
+import storage from '@react-native-firebase/storage';
+import {EventModel} from '../models/EventModel';
+import eventAPI from '../apis/eventApi';
 
 const initValues = {
   title: '',
@@ -30,13 +33,14 @@ const initValues = {
     lat: '',
     long: '',
   },
-  imageUrl: '',
+  photoUrl: '',
   users: [],
   authorId: '',
   startAt: Date.now(),
   endAt: Date.now(),
   date: Date.now(),
   price: '',
+  category: '',
 };
 
 const AddNewScreen = () => {
@@ -47,43 +51,25 @@ const AddNewScreen = () => {
     authorId: auth.id,
   });
   const [usersSelects, setUsersSelects] = useState<SelectModel[]>([]);
-  const handleChangeValue = (key: string, value: string | Date | string[]) => {
-    const items = {...eventData};
-    items[`${key}`] = value;
-
-    setEventData(items);
-  };
   const [fileSelected, setFileSelected] = useState<any>();
-  const [errorText, setErrorText] = useState<string[]>([]);
-
-  const categories = [
-    {
-      value: 'sports',
-      label: 'Sports',
-    },
-    {
-      value: 'mucsic',
-      label: 'Music',
-    },
-    {
-      value: 'food',
-      label: 'Food',
-    },
-    {
-      value: 'art',
-      label: 'Art',
-    },
-  ];
+  const [errorsMess, setErrorsMess] = useState<string[]>([]);
 
   useEffect(() => {
     handleGetAllUsers();
   }, []);
 
   useEffect(() => {
-    const errors = Validate.Event(eventData);
+    const mess = Validate.EventValidation(eventData);
 
-    setErrorText(errors);
+    setErrorsMess(mess);
   }, [eventData]);
+
+  const handleChangeValue = (key: string, value: string | Date | string[]) => {
+    const items = {...eventData};
+    items[`${key}`] = value;
+
+    setEventData(items);
+  };
 
   const handleGetAllUsers = async () => {
     const api = `/get-all`;
@@ -111,18 +97,60 @@ const AddNewScreen = () => {
   };
 
   const handleAddEvent = async () => {
-    const validateEvent = Validate.Event(eventData);
-    if (validateEvent.length > 0) {
-      setErrorText(validateEvent);
+    if (fileSelected) {
+      const filename = `${fileSelected.filename ?? `image-${Date.now()}`}.${
+        fileSelected.path.split('.')[1]
+      }`;
+      const path = `images/${filename}`;
+
+      const res = storage().ref(path).putFile(fileSelected.path);
+
+      res.on(
+        'state_changed',
+        snap => {
+          console.log(snap.bytesTransferred);
+        },
+        error => {
+          console.log(error);
+        },
+        () => {
+          storage()
+            .ref(path)
+            .getDownloadURL()
+            .then(url => {
+              eventData.photoUrl = url;
+
+              handlePustEvent(eventData);
+            });
+        },
+      );
     } else {
-      setErrorText([]);
-      console.log('OK');
+      handlePustEvent(eventData);
+    }
+  };
+
+  const handlePustEvent = async (event: EventModel) => {
+    const api = `/add-new`;
+    try {
+      const res = await eventAPI.HandleEvent(api, event, 'post');
+
+      console.log(res);
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const handleFileSelected = (val: ImageOrVideo) => {
     setFileSelected(val);
-    handleChangeValue('imageUrl', val.path);
+    handleChangeValue('photoUrl', val.path);
+  };
+
+  const handleLocation = (val: any) => {
+    const items = {...eventData};
+    items.position = val.postion;
+    items.locationAddress = val.address;
+
+    setEventData(items);
   };
 
   return (
@@ -131,10 +159,10 @@ const AddNewScreen = () => {
         <TextComponent text="Add new" title />
       </SectionComponent>
       <SectionComponent>
-        {eventData.imageUrl ? (
+        {eventData.photoUrl || fileSelected ? (
           <Image
             source={{
-              uri: eventData.imageUrl,
+              uri: eventData.photoUrl ? eventData.photoUrl : fileSelected.uri,
             }}
             style={{width: '100%', height: 250, marginBottom: 12}}
             resizeMode="cover"
@@ -145,7 +173,7 @@ const AddNewScreen = () => {
         <ButtonImagePicker
           onSelect={(val: any) =>
             val.type === 'url'
-              ? handleChangeValue('imageUrl', val.value as string)
+              ? handleChangeValue('photoUrl', val.value as string)
               : handleFileSelected(val.value)
           }
         />
@@ -163,12 +191,30 @@ const AddNewScreen = () => {
           value={eventData.description}
           onChange={val => handleChangeValue('description', val)}
         />
+
         <DropdownPicker
-          label="Category"
-          values={categories}
           selected={eventData.category}
+          values={[
+            {
+              label: 'Sport',
+              value: 'sport',
+            },
+            {
+              label: 'Food',
+              value: 'food',
+            },
+            {
+              label: 'Art',
+              value: 'art',
+            },
+            {
+              label: 'Music',
+              value: 'music',
+            },
+          ]}
           onSelect={val => handleChangeValue('category', val)}
         />
+
         <RowComponent>
           <DateTimePicker
             label="Start at: "
@@ -207,12 +253,7 @@ const AddNewScreen = () => {
           value={eventData.locationTitle}
           onChange={val => handleChangeValue('locationTitle', val)}
         />
-        <ChoiceLocation
-          onSelect={val => {
-            handleChangeValue('locationAddress', val.address);
-            handleChangeValue('position', val.postion);
-          }}
-        />
+        <ChoiceLocation onSelect={val => handleLocation(val)} />
         <InputComponent
           placeholder="Price"
           allowClear
@@ -221,21 +262,23 @@ const AddNewScreen = () => {
           onChange={val => handleChangeValue('price', val)}
         />
       </SectionComponent>
-      {errorText.length > 0 && (
+
+      {errorsMess.length > 0 && (
         <SectionComponent>
-          {errorText.map((text, index) => (
+          {errorsMess.map(mess => (
             <TextComponent
-              key={`error${index}`}
-              text={text}
+              text={mess}
+              key={mess}
               color={appColors.danger}
               styles={{marginBottom: 12}}
             />
           ))}
         </SectionComponent>
       )}
+
       <SectionComponent>
         <ButtonComponent
-          disable={errorText.length > 0}
+          disable={errorsMess.length > 0}
           text="Add New"
           onPress={handleAddEvent}
           type="primary"

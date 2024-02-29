@@ -1,6 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import DrawerNavigator from './DrawerNavigator';
+import {EventDetail} from '../screens';
 
 const MainNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -11,6 +12,7 @@ const MainNavigator = () => {
         headerShown: false,
       }}>
       <Stack.Screen name="Main" component={DrawerNavigator} />
+      <Stack.Screen name="EventDetail" component={EventDetail} />
     </Stack.Navigator>
   );
 };
