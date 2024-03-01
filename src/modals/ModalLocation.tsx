@@ -51,25 +51,33 @@ const ModalLocation = (props: Props) => {
   }>();
 
   useEffect(() => {
-    GeoLocation.getCurrentPosition(position => {
-      if (position.coords) {
-        setCurrentLocation({
-          lat: position.coords.latitude,
-          long: position.coords.longitude,
-        });
-      }
-    });
+    GeoLocation.getCurrentPosition(
+      position => {
+        if (position.coords) {
+          setCurrentLocation({
+            lat: position.coords.latitude,
+            long: position.coords.longitude,
+          });
+        }
+      },
+      error => {
+        console.log(error);
+      },
+      {},
+    );
   }, []);
 
   useEffect(() => {
-    GeoCoder.from(addressSelected).then(res => {
-      const position = res.results[0].geometry.location;
+    GeoCoder.from(addressSelected)
+      .then(res => {
+        const position = res.results[0].geometry.location;
 
-      setCurrentLocation({
-        lat: position.lat,
-        long: position.lng,
-      });
-    });
+        setCurrentLocation({
+          lat: position.lat,
+          long: position.lng,
+        });
+      })
+      .catch(error => console.log(error));
   }, [addressSelected]);
 
   useEffect(() => {
@@ -97,6 +105,31 @@ const ModalLocation = (props: Props) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleGetAddressFromPosition = ({
+    latitude,
+    longitude,
+  }: {
+    latitude: number;
+    longitude: number;
+  }) => {
+    onSelect({
+      address: 'This is demo address',
+      postion: {
+        lat: latitude,
+        long: longitude,
+      },
+    });
+    onClose();
+    GeoCoder.from(latitude, longitude)
+      .then(data => {
+        console.log(data);
+        console.log(data.results[0].address_components[0]);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   return (
@@ -169,6 +202,9 @@ const ModalLocation = (props: Props) => {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
+            onPress={event =>
+              handleGetAddressFromPosition(event.nativeEvent.coordinate)
+            }
             region={{
               latitude: currentLocation.lat,
               longitude: currentLocation.long,

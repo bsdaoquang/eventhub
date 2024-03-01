@@ -1,4 +1,4 @@
-import {View, Text, Image} from 'react-native';
+import {Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   ButtonComponent,
@@ -43,7 +43,7 @@ const initValues = {
   category: '',
 };
 
-const AddNewScreen = () => {
+const AddNewScreen = ({navigation}: any) => {
   const auth = useSelector(authSelector);
 
   const [eventData, setEventData] = useState<any>({
@@ -133,8 +133,9 @@ const AddNewScreen = () => {
     const api = `/add-new`;
     try {
       const res = await eventAPI.HandleEvent(api, event, 'post');
-
-      console.log(res);
+      navigation.navigate('Explore', {
+        screen: 'HomeScreen',
+      });
     } catch (error) {
       console.log(error);
     }
