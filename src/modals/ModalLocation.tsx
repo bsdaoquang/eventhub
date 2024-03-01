@@ -1,3 +1,4 @@
+import GeoLocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import {SearchNormal1} from 'iconsax-react-native';
 import React, {useEffect, useState} from 'react';
@@ -8,6 +9,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import GeoCoder from 'react-native-geocoding';
+import MapView from 'react-native-maps';
 import {
   ButtonComponent,
   InputComponent,
@@ -16,13 +19,8 @@ import {
   TextComponent,
 } from '../components';
 import {appColors} from '../constants/appColors';
-import {LocationModel} from '../models/LocationModel';
-import MapView from 'react-native-maps';
 import {appInfo} from '../constants/appInfos';
-import {AddressModel} from '../models/AddressModel';
-import GeoLocation from '@react-native-community/geolocation';
-import GeoCoder from 'react-native-geocoding';
-import {Marker} from 'react-native-svg';
+import {LocationModel} from '../models/LocationModel';
 
 GeoCoder.init(process.env.MAP_API_KEY as string);
 
