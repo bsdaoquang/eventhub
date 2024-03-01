@@ -7,12 +7,11 @@ import {KnifeFork_Color} from '../assets/svgs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface Props {
-  onPress: () => void;
   type: string;
 }
 
 const MakerCustom = (props: Props) => {
-  const {type, onPress} = props;
+  const {type} = props;
 
   const renderIcon = (type: string) => {
     let icon;
@@ -38,26 +37,24 @@ const MakerCustom = (props: Props) => {
     return icon;
   };
   return (
-    <TouchableOpacity onPress={onPress}>
-      <ImageBackground
-        source={require('../assets/images/Union.png')}
-        style={[
-          globalStyles.shadow,
-          {
-            width: 56,
-            height: 56,
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-        ]}
-        imageStyle={{
-          resizeMode: 'contain',
+    <ImageBackground
+      source={require('../assets/images/Union.png')}
+      style={[
+        globalStyles.shadow,
+        {
           width: 56,
           height: 56,
-        }}>
-        {renderIcon(type)}
-      </ImageBackground>
-    </TouchableOpacity>
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+      ]}
+      imageStyle={{
+        resizeMode: 'contain',
+        width: 56,
+        height: 56,
+      }}>
+      {renderIcon(type)}
+    </ImageBackground>
   );
 };
 

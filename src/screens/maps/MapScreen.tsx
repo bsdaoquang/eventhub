@@ -1,7 +1,7 @@
 import GeoLocation from '@react-native-community/geolocation';
 import {ArrowLeft2} from 'iconsax-react-native';
 import React, {useEffect, useState} from 'react';
-import {StatusBar, TouchableOpacity, View} from 'react-native';
+import {FlatList, StatusBar, TouchableOpacity, View} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import eventAPI from '../../apis/eventApi';
@@ -9,10 +9,12 @@ import {KnifeFork_Color} from '../../assets/svgs';
 import {
   CardComponent,
   CategoriesList,
+  EventItem,
   InputComponent,
   MakerCustom,
   RowComponent,
   SpaceComponent,
+  TextComponent,
 } from '../../components';
 import {appColors} from '../../constants/appColors';
 import {appInfo} from '../../constants/appInfos';
@@ -85,7 +87,7 @@ const MapScreen = ({navigation}: any) => {
             latitudeDelta: 0.001,
             longitudeDelta: 0.015,
           }}
-          mapType="standard">
+          mapType="mutedStandard">
           {events.length > 0 &&
             events.map((event, index) => (
               <Marker
@@ -97,7 +99,7 @@ const MapScreen = ({navigation}: any) => {
                   longitude: event.position.long,
                   latitude: event.position.lat,
                 }}>
-                <MakerCustom type={event.category} onPress={() => {}} />
+                <MakerCustom type={event.category} />
               </Marker>
             ))}
         </MapView>
@@ -148,6 +150,21 @@ const MapScreen = ({navigation}: any) => {
         </RowComponent>
         <SpaceComponent height={20} />
         <CategoriesList />
+      </View>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 10,
+          right: 0,
+          left: 0,
+        }}>
+        <FlatList
+          initialScrollIndex={0}
+          data={events}
+          renderItem={({item}) => <EventItem item={item} type="list" />}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
       </View>
     </View>
   );

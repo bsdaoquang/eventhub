@@ -11,6 +11,7 @@ export interface EventModel {
   photoUrl: string;
   position: Position;
   price: string;
+  date: number;
   startAt: number;
   title: string;
   updatedAt: string;
