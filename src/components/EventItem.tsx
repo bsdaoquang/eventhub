@@ -99,7 +99,8 @@ const EventItem = (props: Props) => {
             <View
               style={{
                 flex: 1,
-                alignItems: 'stretch',
+                justifyContent: 'space-between',
+                height: '100%',
               }}>
               <TextComponent
                 color={appColors.primary}
@@ -107,7 +108,7 @@ const EventItem = (props: Props) => {
                   new Date(item.startAt),
                 )}`}
               />
-              <TextComponent text={item.title} title size={18} numOfLine={2} />
+              <TextComponent text={item.title} title size={19} numOfLine={2} />
               <RowComponent>
                 <Location size={18} color={appColors.text3} variant="Bold" />
                 <SpaceComponent width={8} />

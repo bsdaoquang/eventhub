@@ -65,18 +65,18 @@ const ModalLocation = (props: Props) => {
     );
   }, []);
 
-  useEffect(() => {
-    GeoCoder.from(addressSelected)
-      .then(res => {
-        const position = res.results[0].geometry.location;
+  // useEffect(() => {
+  //   GeoCoder.from(addressSelected)
+  //     .then(res => {
+  //       const position = res.results[0].geometry.location;
 
-        setCurrentLocation({
-          lat: position.lat,
-          long: position.lng,
-        });
-      })
-      .catch(error => console.log(error));
-  }, [addressSelected]);
+  //       setCurrentLocation({
+  //         lat: position.lat,
+  //         long: position.lng,
+  //       });
+  //     })
+  //     .catch(error => console.log(error));
+  // }, [addressSelected]);
 
   useEffect(() => {
     if (!searchKey) {
@@ -120,14 +120,14 @@ const ModalLocation = (props: Props) => {
       },
     });
     onClose();
-    GeoCoder.from(latitude, longitude)
-      .then(data => {
-        console.log(data);
-        console.log(data.results[0].address_components[0]);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    // GeoCoder.from(latitude, longitude)
+    //   .then(data => {
+    //     console.log(data);
+    //     console.log(data.results[0].address_components[0]);
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
   };
 
   return (

@@ -1,21 +1,16 @@
+import React, {ReactNode, useState} from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  StyleSheet,
-  TextInputProps,
   KeyboardType,
   StyleProp,
+  TextInput,
+  TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native';
-import React, {ReactNode, useState} from 'react';
-import {Touchable} from 'react-native';
-import {EyeSlash} from 'iconsax-react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {appColors} from '../constants/appColors';
 import {globalStyles} from '../styles/globalStyles';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 
 interface Props {
   value: string;
@@ -66,6 +61,7 @@ const InputComponent = (props: Props) => {
           globalStyles.text,
           {
             paddingHorizontal: affix || suffix ? 12 : 0,
+            textAlignVertical: multiline ? 'top' : 'center',
           },
         ]}
         multiline={multiline}
