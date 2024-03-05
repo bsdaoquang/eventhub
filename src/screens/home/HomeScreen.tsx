@@ -22,6 +22,7 @@ import {
   CategoriesList,
   CircleComponent,
   EventItem,
+  LoadingComponent,
   RowComponent,
   SectionComponent,
   SpaceComponent,
@@ -42,6 +43,7 @@ const HomeScreen = ({navigation}: any) => {
   const [currentLocation, setCurrentLocation] = useState<AddressModel>();
   const [events, setEvents] = useState<EventModel[]>([]);
   const [nearbyEvents, setNearbyEvents] = useState<EventModel[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     GeoLocation.getCurrentPosition(
@@ -84,20 +86,25 @@ const HomeScreen = ({navigation}: any) => {
   };
 
   const getEvents = async (lat?: number, long?: number, distance?: number) => {
-    const api =
+    const api = `${
       lat && long
         ? `/get-events?lat=${lat}&long=${long}&distance=${
             distance ?? 5
           }&limit=5`
-        : `/get-events?limit=5`;
+        : `/get-events?limit=5`
+    }`;
+    // &date=${new Date().toISOString()}`;
 
+    setIsLoading(true);
     try {
       const res = await eventAPI.HandleEvent(api);
 
+      setIsLoading(false);
       res &&
         res.data &&
         (lat && long ? setNearbyEvents(res.data) : setEvents(res.data));
     } catch (error) {
+      setIsLoading(false);
       console.log(`Get event error in home screen line 74 ${error}`);
     }
   };
@@ -222,14 +229,18 @@ const HomeScreen = ({navigation}: any) => {
         ]}>
         <SectionComponent styles={{paddingHorizontal: 0, paddingTop: 24}}>
           <TabBarComponent title="Upcoming Events" onPress={() => {}} />
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={events}
-            renderItem={({item, index}) => (
-              <EventItem key={`event${index}`} item={item} type="card" />
-            )}
-          />
+          {events.length > 0 ? (
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={events}
+              renderItem={({item, index}) => (
+                <EventItem key={`event${index}`} item={item} type="card" />
+              )}
+            />
+          ) : (
+            <LoadingComponent isLoading={isLoading} values={events.length} />
+          )}
         </SectionComponent>
         <SectionComponent>
           <ImageBackground
@@ -263,14 +274,21 @@ const HomeScreen = ({navigation}: any) => {
         </SectionComponent>
         <SectionComponent styles={{paddingHorizontal: 0, paddingTop: 24}}>
           <TabBarComponent title="Nearby You" onPress={() => {}} />
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={nearbyEvents}
-            renderItem={({item, index}) => (
-              <EventItem key={`event${index}`} item={item} type="card" />
-            )}
-          />
+          {nearbyEvents.length > 0 ? (
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={nearbyEvents}
+              renderItem={({item, index}) => (
+                <EventItem key={`event${index}`} item={item} type="card" />
+              )}
+            />
+          ) : (
+            <LoadingComponent
+              isLoading={isLoading}
+              values={nearbyEvents.length}
+            />
+          )}
         </SectionComponent>
       </ScrollView>
     </View>
