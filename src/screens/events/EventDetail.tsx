@@ -1,5 +1,5 @@
 import {ArrowLeft, ArrowRight, Calendar, Location} from 'iconsax-react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ImageBackground,
   ScrollView,
@@ -23,14 +23,74 @@ import {appColors} from '../../constants/appColors';
 import {EventModel} from '../../models/EventModel';
 import {globalStyles} from '../../styles/globalStyles';
 import {fontFamilies} from '../../constants/fontFamilies';
+import {useSelector} from 'react-redux';
+import {authSelector} from '../../redux/reducers/authReducer';
+import eventAPI from '../../apis/eventApi';
+import {LoadingModal} from '../../modals';
 
 const EventDetail = ({navigation, route}: any) => {
   const {item}: {item: EventModel} = route.params;
+  const [isLoading, setIsLoading] = useState(false);
+  const [followers, setFollowers] = useState<string[]>([]);
+
+  const auth = useSelector(authSelector);
+
+  useEffect(() => {
+    item && getFollowersById();
+  }, [item]);
+
+  const getFollowersById = async () => {
+    const api = `/followers?id=${item._id}`;
+
+    try {
+      const res = await eventAPI.HandleEvent(api);
+      res && res.data && setFollowers(res.data);
+    } catch (error) {
+      console.log(`Can not get followers by event id ${error}`);
+    }
+  };
+
+  const handleFlower = () => {
+    const items = [...followers];
+
+    if (items.includes(auth.id)) {
+      const index = items.findIndex(element => element === auth.id);
+
+      if (index !== -1) {
+        items.splice(index, 1);
+      }
+    } else {
+      items.push(auth.id);
+    }
+
+    setFollowers(items);
+
+    handleUpdateFollowers(items);
+  };
+
+  const handleUpdateFollowers = async (data: string[]) => {
+    const api = `/update-followes`;
+    setIsLoading(true);
+    try {
+      await eventAPI.HandleEvent(
+        api,
+        {
+          id: item._id,
+          followers: data,
+        },
+        'post',
+      );
+      setIsLoading(false);
+    } catch (error) {
+      console.log(`Can not update followers in Event detail line 63, ${error}`);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <ImageBackground
-        source={require('../../assets/images/event-image.png')}
+        source={{uri: item.photoUrl}}
         style={{flex: 1, height: 244}}
         imageStyle={{
           resizeMode: 'cover',
@@ -59,11 +119,16 @@ const EventDetail = ({navigation, route}: any) => {
                 color={appColors.white}
               />
               <CardComponent
+                onPress={handleFlower}
                 styles={[globalStyles.noSpaceCard, {width: 36, height: 36}]}
-                color="#ffffff4D">
+                color={followers.includes(auth.id) ? '#ffffffB3' : '#ffffff4D'}>
                 <MaterialIcons
                   name="bookmark"
-                  color={appColors.white}
+                  color={
+                    followers.includes(auth.id)
+                      ? appColors.danger2
+                      : appColors.white
+                  }
                   size={22}
                 />
               </CardComponent>
@@ -78,33 +143,43 @@ const EventDetail = ({navigation, route}: any) => {
             paddingTop: 244 - 130,
           }}>
           <SectionComponent>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1,
-              }}>
-              <RowComponent
-                justify="space-between"
-                styles={[
-                  globalStyles.shadow,
-                  {
-                    backgroundColor: appColors.white,
-                    borderRadius: 100,
-                    paddingHorizontal: 12,
-                    width: '90%',
-                  },
-                ]}>
-                <AvatarGroup size={36} />
-                <TouchableOpacity
-                  style={[
-                    globalStyles.button,
-                    {backgroundColor: appColors.primary, paddingVertical: 8},
+            {item.users.length > 0 ? (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flex: 1,
+                }}>
+                <RowComponent
+                  justify="space-between"
+                  styles={[
+                    globalStyles.shadow,
+                    {
+                      backgroundColor: appColors.white,
+                      borderRadius: 100,
+                      paddingHorizontal: 12,
+                      width: '90%',
+                    },
                   ]}>
-                  <TextComponent text="Invite" color={appColors.white} />
-                </TouchableOpacity>
-              </RowComponent>
-            </View>
+                  <AvatarGroup userIds={item.users} size={36} />
+                  <TouchableOpacity
+                    style={[
+                      globalStyles.button,
+                      {backgroundColor: appColors.primary, paddingVertical: 8},
+                    ]}>
+                    <TextComponent text="Invite" color={appColors.white} />
+                  </TouchableOpacity>
+                </RowComponent>
+              </View>
+            ) : (
+              <>
+                <ButtonComponent
+                  text="Invite"
+                  styles={{borderRadius: 100}}
+                  type="primary"
+                />
+              </>
+            )}
           </SectionComponent>
           <View
             style={{
@@ -165,12 +240,12 @@ const EventDetail = ({navigation, route}: any) => {
                     justifyContent: 'space-around',
                   }}>
                   <TextComponent
-                    text={item.location.title}
+                    text={item.locationTitle}
                     font={fontFamilies.medium}
                     size={16}
                   />
                   <TextComponent
-                    text={item.location.address}
+                    text={item.locationAddress}
                     color={appColors.gray}
                   />
                 </View>
@@ -243,6 +318,8 @@ const EventDetail = ({navigation, route}: any) => {
           }
         />
       </LinearGradient>
+
+      <LoadingModal visible={isLoading} />
     </View>
   );
 };
