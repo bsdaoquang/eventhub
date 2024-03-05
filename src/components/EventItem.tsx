@@ -16,6 +16,9 @@ import {globalStyles} from '../styles/globalStyles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {DateTime} from '../utils/DateTime';
+import {useSelector} from 'react-redux';
+import {authSelector} from '../redux/reducers/authReducer';
+import {numberToString} from '../utils/numberToString';
 
 interface Props {
   item: EventModel;
@@ -26,6 +29,7 @@ const EventItem = (props: Props) => {
   const {item, type} = props;
 
   const navigation: any = useNavigation();
+  const auth = useSelector(authSelector);
 
   return (
     <CardComponent
@@ -36,7 +40,7 @@ const EventItem = (props: Props) => {
         <>
           <ImageBackground
             style={{flex: 1, marginBottom: 12, height: 131, padding: 10}}
-            source={require('../assets/images/event-image.png')}
+            source={{uri: item.photoUrl}}
             imageStyle={{
               resizeMode: 'cover',
               borderRadius: 12,
@@ -49,28 +53,32 @@ const EventItem = (props: Props) => {
                   color={appColors.danger2}
                   font={fontFamilies.bold}
                   size={18}
-                  text="10"
+                  text={numberToString(new Date(item.date).getDate())}
                 />
                 <TextComponent
                   color={appColors.danger2}
                   font={fontFamilies.semiBold}
                   size={10}
-                  text="JUNE"
+                  text={appInfo.monthNames[
+                    new Date(item.date).getMonth()
+                  ].substring(0, 3)}
                 />
               </CardComponent>
-              <CardComponent
-                styles={[globalStyles.noSpaceCard]}
-                color="#ffffffB3">
-                <MaterialIcons
-                  name="bookmark"
-                  color={appColors.danger2}
-                  size={22}
-                />
-              </CardComponent>
+              {item.followers && item.followers.includes(auth.id) && (
+                <CardComponent
+                  styles={[globalStyles.noSpaceCard]}
+                  color="#ffffffB3">
+                  <MaterialIcons
+                    name="bookmark"
+                    color={appColors.danger2}
+                    size={22}
+                  />
+                </CardComponent>
+              )}
             </RowComponent>
           </ImageBackground>
           <TextComponent numOfLine={1} text={item.title} title size={18} />
-          <AvatarGroup />
+          <AvatarGroup userIds={item.users} />
           <RowComponent>
             <Location size={18} color={appColors.text3} variant="Bold" />
             <SpaceComponent width={8} />

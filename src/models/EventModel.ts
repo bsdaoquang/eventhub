@@ -15,7 +15,8 @@ export interface EventModel {
   startAt: number;
   title: string;
   updatedAt: string;
-  users: any[];
+  users: string[];
+  followers?: string[];
 }
 
 export interface Position {

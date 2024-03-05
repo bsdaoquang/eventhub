@@ -30,7 +30,7 @@ const MapScreen = ({navigation}: any) => {
 
   useEffect(() => {
     GeoLocation.getCurrentPosition(
-      position => {
+      (position: any) => {
         if (position.coords) {
           setCurrentLocation({
             lat: position.coords.latitude,
@@ -38,7 +38,7 @@ const MapScreen = ({navigation}: any) => {
           });
         }
       },
-      error => {
+      (error: any) => {
         console.log(error);
       },
       {},
@@ -87,7 +87,7 @@ const MapScreen = ({navigation}: any) => {
             latitudeDelta: 0.001,
             longitudeDelta: 0.015,
           }}
-          mapType="mutedStandard">
+          mapType="standard">
           {events.length > 0 &&
             events.map((event, index) => (
               <Marker
