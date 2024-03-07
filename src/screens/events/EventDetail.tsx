@@ -39,8 +39,6 @@ const EventDetail = ({navigation, route}: any) => {
   const auth: AuthState = useSelector(authSelector);
   const dispatch = useDispatch();
 
-  console.log(auth.follow_events);
-
   useEffect(() => {
     item && getFollowersById();
   }, [item]);
