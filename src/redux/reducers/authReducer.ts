@@ -1,15 +1,17 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-interface AuthState {
+export interface AuthState {
   id: string;
   email: string;
   accesstoken: string;
+  follow_events: string[];
 }
 
 const initialState: AuthState = {
   id: '',
   email: '',
   accesstoken: '',
+  follow_events: [],
 };
 
 const authSlice = createSlice({
@@ -25,10 +27,14 @@ const authSlice = createSlice({
     removeAuth: (state, action) => {
       state.authData = initialState;
     },
+
+    addFollowedEvent: (state, action) => {
+      state.authData.follow_events = action.payload;
+    },
   },
 });
 
 export const authReducer = authSlice.reducer;
-export const {addAuth, removeAuth} = authSlice.actions;
+export const {addAuth, removeAuth, addFollowedEvent} = authSlice.actions;
 
 export const authSelector = (state: any) => state.authReducer.authData;

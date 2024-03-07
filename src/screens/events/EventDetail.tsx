@@ -23,17 +23,23 @@ import {appColors} from '../../constants/appColors';
 import {EventModel} from '../../models/EventModel';
 import {globalStyles} from '../../styles/globalStyles';
 import {fontFamilies} from '../../constants/fontFamilies';
-import {useSelector} from 'react-redux';
-import {authSelector} from '../../redux/reducers/authReducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {AuthState, authSelector} from '../../redux/reducers/authReducer';
 import eventAPI from '../../apis/eventApi';
 import {LoadingModal} from '../../modals';
+import {UserHandle} from '../../utils/UserHandlers';
+import {DateTime} from '../../utils/DateTime';
+import {appInfo} from '../../constants/appInfos';
 
 const EventDetail = ({navigation, route}: any) => {
   const {item}: {item: EventModel} = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [followers, setFollowers] = useState<string[]>([]);
 
-  const auth = useSelector(authSelector);
+  const auth: AuthState = useSelector(authSelector);
+  const dispatch = useDispatch();
+
+  console.log(auth.follow_events);
 
   useEffect(() => {
     item && getFollowersById();
@@ -69,8 +75,10 @@ const EventDetail = ({navigation, route}: any) => {
   };
 
   const handleUpdateFollowers = async (data: string[]) => {
+    await UserHandle.getFollowersById(auth.id, dispatch);
+
     const api = `/update-followes`;
-    setIsLoading(true);
+
     try {
       await eventAPI.HandleEvent(
         api,
@@ -80,10 +88,8 @@ const EventDetail = ({navigation, route}: any) => {
         },
         'post',
       );
-      setIsLoading(false);
     } catch (error) {
       console.log(`Can not update followers in Event detail line 63, ${error}`);
-      setIsLoading(false);
     }
   };
 
@@ -121,11 +127,15 @@ const EventDetail = ({navigation, route}: any) => {
               <CardComponent
                 onPress={handleFlower}
                 styles={[globalStyles.noSpaceCard, {width: 36, height: 36}]}
-                color={followers.includes(auth.id) ? '#ffffffB3' : '#ffffff4D'}>
+                color={
+                  auth.follow_events && auth.follow_events.includes(item._id)
+                    ? '#ffffffB3'
+                    : '#ffffff4D'
+                }>
                 <MaterialIcons
                   name="bookmark"
                   color={
-                    followers.includes(auth.id)
+                    auth.follow_events && auth.follow_events.includes(item._id)
                       ? appColors.danger2
                       : appColors.white
                   }
@@ -212,12 +222,14 @@ const EventDetail = ({navigation, route}: any) => {
                     justifyContent: 'space-around',
                   }}>
                   <TextComponent
-                    text="14 December, 2021"
+                    text={`${DateTime.GetDate(new Date(item.date))}`}
                     font={fontFamilies.medium}
                     size={16}
                   />
                   <TextComponent
-                    text="Tuesday, 4:00PM - 9:00PM"
+                    text={`${
+                      appInfo.dayNames[new Date(item.date).getDay()]
+                    }, ${DateTime.GetStartAndEnd(item.startAt, item.endAt)}`}
                     color={appColors.gray}
                   />
                 </View>

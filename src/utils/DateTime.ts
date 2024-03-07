@@ -24,4 +24,15 @@ export class DateTime {
       appInfo.monthNames[date.getMonth()]
     } ${numberToString(date.getDate())}`;
   };
+
+  static GetStartAndEnd = (start: number, end: number) => {
+    const dateStart = new Date(start);
+    const dateEnd = new Date(end);
+
+    return `${numberToString(dateStart.getHours())}:${numberToString(
+      dateStart.getMinutes(),
+    )} - ${numberToString(dateEnd.getHours())}:${numberToString(
+      dateEnd.getMinutes(),
+    )}`;
+  };
 }

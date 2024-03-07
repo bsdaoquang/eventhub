@@ -17,7 +17,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {DateTime} from '../utils/DateTime';
 import {useSelector} from 'react-redux';
-import {authSelector} from '../redux/reducers/authReducer';
+import {AuthState, authSelector} from '../redux/reducers/authReducer';
 import {numberToString} from '../utils/numberToString';
 
 interface Props {
@@ -29,7 +29,7 @@ const EventItem = (props: Props) => {
   const {item, type} = props;
 
   const navigation: any = useNavigation();
-  const auth = useSelector(authSelector);
+  const auth: AuthState = useSelector(authSelector);
 
   return (
     <CardComponent
@@ -64,7 +64,7 @@ const EventItem = (props: Props) => {
                   ].substring(0, 3)}
                 />
               </CardComponent>
-              {item.followers && item.followers.includes(auth.id) && (
+              {auth.follow_events && auth.follow_events.includes(item._id) && (
                 <CardComponent
                   styles={[globalStyles.noSpaceCard]}
                   color="#ffffffB3">
