@@ -46,7 +46,7 @@ export class HandleNotification {
 
   static Update = async (id: string, fcmTokens: string[]) => {
     try {
-      const responsive = await userAPI.HandleUser(
+      await userAPI.HandleUser(
         '/update-fcmtoken',
         {
           uid: id,
@@ -54,7 +54,6 @@ export class HandleNotification {
         },
         'post',
       );
-      console.log(responsive);
     } catch (error) {
       console.log(`Can not update tokens ${error}`);
     }

@@ -13,6 +13,7 @@ import {
   Platform,
   ScrollView,
   StatusBar,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -36,6 +37,9 @@ import {AddressModel} from '../../models/AddressModel';
 import {globalStyles} from '../../styles/globalStyles';
 import eventAPI from '../../apis/eventApi';
 import {EventModel} from '../../models/EventModel';
+import messaging, {
+  FirebaseMessagingTypes,
+} from '@react-native-firebase/messaging';
 
 Geocoder.init(process.env.MAP_API_KEY as string);
 
@@ -62,6 +66,17 @@ const HomeScreen = ({navigation}: any) => {
     );
 
     getEvents();
+
+    messaging().onMessage(
+      async (mess: FirebaseMessagingTypes.RemoteMessage) => {
+        if (Platform.OS === 'android') {
+          ToastAndroid.show(
+            mess.notification?.title ?? 'fafsf',
+            ToastAndroid.SHORT,
+          );
+        }
+      },
+    );
   }, []);
 
   useEffect(() => {
@@ -255,6 +270,7 @@ const HomeScreen = ({navigation}: any) => {
 
             <RowComponent justify="flex-start">
               <TouchableOpacity
+                onPress={() => console.log('fafafa')}
                 style={[
                   globalStyles.button,
                   {
