@@ -5,6 +5,7 @@ export interface AuthState {
   email: string;
   accesstoken: string;
   follow_events: string[];
+  fcmTokens?: string[];
 }
 
 const initialState: AuthState = {
