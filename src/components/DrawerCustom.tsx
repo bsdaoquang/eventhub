@@ -23,7 +23,7 @@ import {
 import {LoginManager} from 'react-native-fbsdk-next';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
-import {RowComponent, SpaceComponent, TextComponent} from '.';
+import {AvatarComponent, RowComponent, SpaceComponent, TextComponent} from '.';
 import {appColors} from '../constants/appColors';
 import {authSelector, removeAuth} from '../redux/reducers/authReducer';
 import {globalStyles} from '../styles/globalStyles';
@@ -124,28 +124,11 @@ const DrawerCustom = ({navigation}: any) => {
 
   return (
     <View style={[localStyles.container]}>
-      <TouchableOpacity onPress={() => handleNavigation('MyProfile')}>
-        {auth.photo ? (
-          <Image source={{uri: auth.photo}} style={[localStyles.avatar]} />
-        ) : (
-          <View
-            style={[localStyles.avatar, {backgroundColor: appColors.gray2}]}>
-            <TextComponent
-              title
-              size={22}
-              color={appColors.white}
-              text={
-                auth.name
-                  ? auth.name
-                      .split(' ')
-                      [auth.name.split(' ').length - 1].substring(0, 1)
-                  : ''
-              }
-            />
-          </View>
-        )}
-        <TextComponent text={auth.name} title size={18} />
-      </TouchableOpacity>
+      <AvatarComponent
+        onPress={() => handleNavigation('MyProfile')}
+        photoURL={auth.photoURL}
+        name={auth.name ? auth.name : auth.email}
+      />
       <FlatList
         showsVerticalScrollIndicator={false}
         data={profileMenu}
