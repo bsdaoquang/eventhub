@@ -1,14 +1,10 @@
 import {ArrowLeft, ArrowRight, Calendar, Location} from 'iconsax-react-native';
 import React, {useEffect, useState} from 'react';
-import {
-  ImageBackground,
-  ScrollView,
-  TouchableOpacity,
-  View,
-  Image,
-} from 'react-native';
+import {Image, ScrollView, TouchableOpacity, View} from 'react-native';
 import {LinearGradient} from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useDispatch, useSelector} from 'react-redux';
+import eventAPI from '../../apis/eventApi';
 import {
   AvatarGroup,
   ButtonComponent,
@@ -20,16 +16,14 @@ import {
   TextComponent,
 } from '../../components';
 import {appColors} from '../../constants/appColors';
-import {EventModel} from '../../models/EventModel';
-import {globalStyles} from '../../styles/globalStyles';
-import {fontFamilies} from '../../constants/fontFamilies';
-import {useDispatch, useSelector} from 'react-redux';
-import {AuthState, authSelector} from '../../redux/reducers/authReducer';
-import eventAPI from '../../apis/eventApi';
-import {LoadingModal} from '../../modals';
-import {UserHandle} from '../../utils/UserHandlers';
-import {DateTime} from '../../utils/DateTime';
 import {appInfo} from '../../constants/appInfos';
+import {fontFamilies} from '../../constants/fontFamilies';
+import {LoadingModal} from '../../modals';
+import {EventModel} from '../../models/EventModel';
+import {AuthState, authSelector} from '../../redux/reducers/authReducer';
+import {globalStyles} from '../../styles/globalStyles';
+import {DateTime} from '../../utils/DateTime';
+import {UserHandle} from '../../utils/UserHandlers';
 
 const EventDetail = ({navigation, route}: any) => {
   const {item}: {item: EventModel} = route.params;
@@ -252,7 +246,16 @@ const EventDetail = ({navigation, route}: any) => {
                 />
               </View>
             </RowComponent>
-            <RowComponent styles={{marginBottom: 20}}>
+            <RowComponent
+              styles={{marginBottom: 20}}
+              onPress={() =>
+                navigation.navigate('Profile', {
+                  screen: 'ProfileScreen',
+                  params: {
+                    id: item.authorId,
+                  },
+                })
+              }>
               <Image
                 source={{
                   uri: 'https://gamek.mediacdn.vn/133514250583805952/2022/5/18/photo-1-16528608926331302726659.jpg',

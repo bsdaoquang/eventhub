@@ -112,6 +112,9 @@ const DrawerCustom = ({navigation}: any) => {
       case 'MyProfile':
         navigation.navigate('Profile', {
           screen: 'ProfileScreen',
+          params: {
+            id: auth.ud,
+          },
         });
         break;
       default:

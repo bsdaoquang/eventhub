@@ -7,4 +7,6 @@ export interface ProfileModel {
   name: string;
   photoUrl: string;
   updatedAt: string;
+  following: string[];
+  uid: string;
 }
