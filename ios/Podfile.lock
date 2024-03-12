@@ -981,28 +981,30 @@ PODS:
   - React-Mapbuffer (0.73.2):
     - glog
     - React-debug
-  - react-native-date-picker (4.3.6):
+  - react-native-date-picker (4.4.0):
     - React-Core
-  - react-native-fbsdk-next (12.1.3):
+  - react-native-fbsdk-next (12.1.4):
     - React-Core
-    - react-native-fbsdk-next/Core (= 12.1.3)
-    - react-native-fbsdk-next/Login (= 12.1.3)
-    - react-native-fbsdk-next/Share (= 12.1.3)
-  - react-native-fbsdk-next/Core (12.1.3):
+    - react-native-fbsdk-next/Core (= 12.1.4)
+    - react-native-fbsdk-next/Login (= 12.1.4)
+    - react-native-fbsdk-next/Share (= 12.1.4)
+  - react-native-fbsdk-next/Core (12.1.4):
     - FBSDKCoreKit (~> 16.3.1)
     - React-Core
-  - react-native-fbsdk-next/Login (12.1.3):
+  - react-native-fbsdk-next/Login (12.1.4):
     - FBSDKLoginKit (~> 16.3.1)
     - React-Core
-  - react-native-fbsdk-next/Share (12.1.3):
+  - react-native-fbsdk-next/Share (12.1.4):
     - FBSDKGamingServicesKit (~> 16.3.1)
     - FBSDKShareKit (~> 16.3.1)
     - React-Core
-  - react-native-geolocation (3.1.0):
+  - react-native-geolocation (3.2.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - react-native-maps (1.10.3):
     - React-Core
-  - react-native-safe-area-context (4.8.2):
+  - react-native-safe-area-context (4.9.0):
     - React-Core
   - React-nativeconfig (0.73.2)
   - React-NativeModulesApple (0.73.2):
@@ -1173,7 +1175,7 @@ PODS:
     - React-perflogger (= 0.73.2)
   - rn-fetch-blob (0.12.0):
     - React-Core
-  - RNCAsyncStorage (1.21.0):
+  - RNCAsyncStorage (1.22.3):
     - React-Core
   - RNFBApp (18.9.0):
     - Firebase/CoreOnly (= 10.20.0)
@@ -1203,7 +1205,7 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController
-  - RNReanimated (3.6.1):
+  - RNReanimated (3.7.2):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1506,11 +1508,11 @@ SPEC CHECKSUMS:
   React-jsinspector: 03644c063fc3621c9a4e8bf263a8150909129618
   React-logger: 66b168e2b2bee57bd8ce9e69f739d805732a5570
   React-Mapbuffer: f40e0ea0df8161075390332dfcb0496442c09371
-  react-native-date-picker: c28ccf1b3bc3de3bc6a785792a393fee49677f89
-  react-native-fbsdk-next: 42229cf278a44c0f7249179c9b2d084109d8e2bd
-  react-native-geolocation: ef66fb798d96284c6043f0b16c15d9d1d4955db4
+  react-native-date-picker: ebcb936d72fc3bbde0dea47c6641e913523231ca
+  react-native-fbsdk-next: a929da980a4ec199391da637d3d2ce22b6e7779e
+  react-native-geolocation: 502286ddb098d14453cd7543f0da7d2e13d2bb7a
   react-native-maps: 72a8a903f8a1b53e2c777ba79102078ab502e0bf
-  react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
+  react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   React-nativeconfig: 4dda3cbbdd1c4ce38450bb10b34b3e54120e4a91
   React-NativeModulesApple: d25a530c61e94fb317a0124b1cde1c459e4a47d3
   React-perflogger: 29efe63b7ef5fbaaa50ef6eaa92482f98a24b97e
@@ -1532,19 +1534,19 @@ SPEC CHECKSUMS:
   React-utils: 414787344613940abeb72cc95fba338e300ba3ac
   ReactCommon: d4860bcbe85d89bb261ba28948f027325bb577dc
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
-  RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
+  RNCAsyncStorage: 10591b9e0a91eaffee14e69b3721009759235125
   RNFBApp: 9b25191f7a5e72c185b7e43fffb0d906869c4659
   RNFBMessaging: 99621af036e0aa85506390f77d79c9e6353aacca
   RNFBStorage: d2fdb2e7e5faefb4df9923e92e22db1a85a69997
   RNGestureHandler: 7feb85c5a30ebbcd4d5c7a851ba9e7eafb9860cb
   RNGoogleSignin: fc408799f1990a12497a32f64280c0fe353ffcc1
   RNImageCropPicker: e7ab6fb43d2fc3e84651e786ef4a080d63b0ed3d
-  RNReanimated: 9fc2b08ed365d7dc451bc451605d89c01f2c935b
+  RNReanimated: 3897a18529a9c8d8a36258ec6ad95addd25ce969
   RNScreens: 2b73f5eb2ac5d94fbd61fa4be0bfebd345716825
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
-  Yoga: 18c02d9a8324aeb4bf4913190a8426a04c8c5112
+  Yoga: e64aa65de36c0832d04e8c7bd614396c77a80047
 
 PODFILE CHECKSUM: b5f6208d8f94425716c4c170e4a0efd525e9ca00
 

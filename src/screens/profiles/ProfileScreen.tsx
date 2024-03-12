@@ -20,39 +20,11 @@ const ProfileScreen = () => {
 
   const auth: AuthState = useSelector(authSelector);
 
-  const handleLogout = async () => {
-    setIsLoading(true);
-
-    const fcmtoken = await AsyncStorage.getItem('fcmtoken');
-
-    if (fcmtoken) {
-      if (auth.fcmTokens && auth.fcmTokens.length > 0) {
-        const items = [...auth.fcmTokens];
-        const index = items.findIndex(element => element === fcmtoken);
-
-        if (index !== -1) {
-          items.splice(index, 1);
-        }
-
-        await HandleNotification.Update(auth.id, items);
-      }
-    }
-
-    await GoogleSignin.signOut();
-    LoginManager.logOut();
-
-    // clear local storage
-    await AsyncStorage.removeItem('auth');
-
-    dispatch(removeAuth({}));
-
-    setIsLoading(false);
-  };
   return (
     <ContainerComponent back>
       <Text>ProfileScreen</Text>
 
-      <ButtonComponent type="primary" text="Logout" onPress={handleLogout} />
+      {/* <ButtonComponent type="primary" text="Logout" onPress={handleLogout} /> */}
       <LoadingModal visible={isLoading} />
     </ContainerComponent>
   );

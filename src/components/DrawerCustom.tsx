@@ -1,20 +1,5 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-  StatusBar,
-  TouchableOpacity,
-  Image,
-  FlatList,
-} from 'react-native';
-import React from 'react';
-import {ButtonComponent, RowComponent, SpaceComponent, TextComponent} from '.';
-import {globalStyles} from '../styles/globalStyles';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useDispatch, useSelector} from 'react-redux';
-import {authSelector, removeAuth} from '../redux/reducers/authReducer';
-import {appColors} from '../constants/appColors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {
   Bookmark2,
   Calendar,
@@ -25,15 +10,31 @@ import {
   Sms,
   User,
 } from 'iconsax-react-native';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import React from 'react';
+import {
+  FlatList,
+  Image,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {LoginManager} from 'react-native-fbsdk-next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useDispatch, useSelector} from 'react-redux';
+import {RowComponent, SpaceComponent, TextComponent} from '.';
+import {appColors} from '../constants/appColors';
+import {authSelector, removeAuth} from '../redux/reducers/authReducer';
+import {globalStyles} from '../styles/globalStyles';
+import {HandleNotification} from '../utils/handleNotification';
 
 const DrawerCustom = ({navigation}: any) => {
-  const user = useSelector(authSelector);
+  const auth = useSelector(authSelector);
   const dispatch = useDispatch();
   const size = 20;
   const color = appColors.gray;
+
   const profileMenu = [
     {
       key: 'MyProfile',
@@ -77,25 +78,55 @@ const DrawerCustom = ({navigation}: any) => {
     },
   ];
 
-  const handleSignOut = async () => {
+  const handleLogout = async () => {
+    const fcmtoken = await AsyncStorage.getItem('fcmtoken');
+
+    if (fcmtoken) {
+      if (auth.fcmTokens && auth.fcmTokens.length > 0) {
+        const items = [...auth.fcmTokens];
+        const index = items.findIndex(element => element === fcmtoken);
+
+        if (index !== -1) {
+          items.splice(index, 1);
+        }
+
+        await HandleNotification.Update(auth.id, items);
+      }
+    }
+
     await GoogleSignin.signOut();
-    await LoginManager.logOut();
+    LoginManager.logOut();
+
+    // clear local storage
+    await AsyncStorage.removeItem('auth');
+
     dispatch(removeAuth({}));
-    await AsyncStorage.clear();
+  };
+
+  const handleNavigation = (key: string) => {
+    switch (key) {
+      case 'SignOut':
+        handleLogout();
+        break;
+
+      case 'MyProfile':
+        navigation.navigate('Profile', {
+          screen: 'ProfileScreen',
+        });
+        break;
+      default:
+        console.log(key);
+        break;
+    }
+
+    navigation.closeDrawer();
   };
 
   return (
     <View style={[localStyles.container]}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.closeDrawer();
-
-          navigation.navigate('Profile', {
-            screen: 'ProfileScreen',
-          });
-        }}>
-        {user.photo ? (
-          <Image source={{uri: user.photo}} style={[localStyles.avatar]} />
+      <TouchableOpacity onPress={() => handleNavigation('MyProfile')}>
+        {auth.photo ? (
+          <Image source={{uri: auth.photo}} style={[localStyles.avatar]} />
         ) : (
           <View
             style={[localStyles.avatar, {backgroundColor: appColors.gray2}]}>
@@ -104,16 +135,16 @@ const DrawerCustom = ({navigation}: any) => {
               size={22}
               color={appColors.white}
               text={
-                user.name
-                  ? user.name
+                auth.name
+                  ? auth.name
                       .split(' ')
-                      [user.name.split(' ').length - 1].substring(0, 1)
+                      [auth.name.split(' ').length - 1].substring(0, 1)
                   : ''
               }
             />
           </View>
         )}
-        <TextComponent text={user.name} title size={18} />
+        <TextComponent text={auth.name} title size={18} />
       </TouchableOpacity>
       <FlatList
         showsVerticalScrollIndicator={false}
@@ -122,14 +153,7 @@ const DrawerCustom = ({navigation}: any) => {
         renderItem={({item, index}) => (
           <RowComponent
             styles={[localStyles.listItem]}
-            onPress={
-              item.key === 'SignOut'
-                ? () => handleSignOut()
-                : () => {
-                    console.log(item.key);
-                    navigation.closeDrawer();
-                  }
-            }>
+            onPress={() => handleNavigation(item.key)}>
             {item.icon}
             <TextComponent
               text={item.title}
