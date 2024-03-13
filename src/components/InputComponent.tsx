@@ -51,14 +51,7 @@ const InputComponent = (props: Props) => {
   const [isShowPass, setIsShowPass] = useState(isPassword ?? false);
 
   return (
-    <View
-      style={[
-        globalStyles.inputContainer,
-        {
-          alignItems: multiline ? 'flex-start' : 'center',
-        },
-        styles,
-      ]}>
+    <View style={[globalStyles.inputContainer, styles]}>
       {affix ?? affix}
       <TextInput
         style={[
@@ -66,6 +59,7 @@ const InputComponent = (props: Props) => {
           globalStyles.text,
           {
             paddingHorizontal: affix || suffix ? 12 : 0,
+            textAlignVertical: multiline ? 'top' : 'auto',
           },
         ]}
         multiline={multiline}

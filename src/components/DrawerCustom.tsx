@@ -113,7 +113,7 @@ const DrawerCustom = ({navigation}: any) => {
         navigation.navigate('Profile', {
           screen: 'ProfileScreen',
           params: {
-            id: auth.ud,
+            id: auth.id,
           },
         });
         break;
@@ -129,7 +129,7 @@ const DrawerCustom = ({navigation}: any) => {
     <View style={[localStyles.container]}>
       <AvatarComponent
         onPress={() => handleNavigation('MyProfile')}
-        photoURL={auth.photoURL}
+        photoURL={auth.photo}
         name={auth.name ? auth.name : auth.email}
       />
       <FlatList

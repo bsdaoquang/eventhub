@@ -28,8 +28,11 @@ const ProfileScreen = ({navigation, route}: any) => {
   useEffect(() => {
     if (route.params) {
       const {id} = route.params;
-
       setProfileId(id);
+
+      if (route.params.isUpdated) {
+        getProfile();
+      }
     } else {
       setProfileId(auth.id);
     }
@@ -114,7 +117,11 @@ const ProfileScreen = ({navigation, route}: any) => {
               </View>
             </RowComponent>
           </SectionComponent>
-          {auth.id !== profileId ? <AboutProfile /> : <EditProfile />}
+          {auth.id !== profileId ? (
+            <AboutProfile />
+          ) : (
+            <EditProfile profile={profile} />
+          )}
         </>
       ) : (
         <TextComponent text="profile not found!" />
