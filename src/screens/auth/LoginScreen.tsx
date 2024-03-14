@@ -1,6 +1,6 @@
 import {Cake, Lock, Sms} from 'iconsax-react-native';
 import React, {useEffect, useState} from 'react';
-import {Alert, Image, Switch} from 'react-native';
+import {Alert, Image, Switch, TouchableOpacity} from 'react-native';
 import authenticationAPI from '../../apis/authApi';
 import {
   ButtonComponent,
@@ -18,6 +18,7 @@ import {useDispatch} from 'react-redux';
 import {addAuth} from '../../redux/reducers/authReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LoadingModal} from '../../modals';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const LoginScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
@@ -40,6 +41,7 @@ const LoginScreen = ({navigation}: any) => {
 
   const handleLogin = async () => {
     const emailValidation = Validate.email(email);
+    setIsLoading(true);
     if (emailValidation) {
       setIsLoading(true);
       try {
@@ -128,6 +130,10 @@ const LoginScreen = ({navigation}: any) => {
           type="primary"
         />
       </SectionComponent>
+
+      {/* <TouchableOpacity onPress={async () => await GoogleSignin.signOut()}>
+        <TextComponent text="fafafa" />
+      </TouchableOpacity> */}
       <SocialLogin />
       <SectionComponent>
         <RowComponent justify="center">

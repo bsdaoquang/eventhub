@@ -24,7 +24,6 @@ const EditProfileScreen = ({navigation, route}: any) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleFileSelected = (val: ImageOrVideo) => {
-    console.log(val);
     setFileSelected(val);
     handleChangeValue('photoUrl', val.path);
   };
