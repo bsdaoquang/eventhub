@@ -29,8 +29,6 @@ const ProfileScreen = ({navigation, route}: any) => {
   const dispatch = useDispatch();
   const auth: AuthState = useSelector(authSelector);
 
-  console.log(auth, profile?.photoUrl);
-
   useEffect(() => {
     if (route.params) {
       const {id} = route.params;
@@ -76,6 +74,8 @@ const ProfileScreen = ({navigation, route}: any) => {
       console.log();
     }
   };
+
+  console.log(profile);
 
   return (
     <ContainerComponent back title="Profile">

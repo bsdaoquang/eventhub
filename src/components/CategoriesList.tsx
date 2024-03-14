@@ -5,16 +5,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {TagComponent} from '.';
 import {KnifeFork, KnifeFork_Color} from '../assets/svgs';
 import {appColors} from '../constants/appColors';
+import {Category} from '../models/Category';
 
 interface Props {
   isFill?: boolean;
-}
-
-interface Category {
-  icon: ReactNode;
-  color: string;
-  label: string;
-  key: string;
 }
 
 const CategoriesList = (props: Props) => {
