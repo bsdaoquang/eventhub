@@ -235,7 +235,6 @@ const EventDetail = ({navigation, route}: any) => {
                   justifyContent: 'space-around',
                 }}>
                 <TextComponent
-                  // numOfLine={1}
                   text={item.locationTitle}
                   font={fontFamilies.medium}
                   size={16}
@@ -249,11 +248,8 @@ const EventDetail = ({navigation, route}: any) => {
             <RowComponent
               styles={{marginBottom: 20}}
               onPress={() =>
-                navigation.navigate('Profile', {
-                  screen: 'ProfileScreen',
-                  params: {
-                    id: item.authorId,
-                  },
+                navigation.navigate('ProfileScreen', {
+                  id: item.authorId,
                 })
               }>
               <Image

@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import userAPI from '../../apis/userApi';
 import {
   AvatarComponent,
+  ButtonComponent,
   ContainerComponent,
   RowComponent,
   SectionComponent,
@@ -19,6 +20,8 @@ import {
 import {globalStyles} from '../../styles/globalStyles';
 import AboutProfile from './components/AboutProfile';
 import EditProfile from './components/EditProfile';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {appColors} from '../../constants/appColors';
 
 const ProfileScreen = ({navigation, route}: any) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +43,7 @@ const ProfileScreen = ({navigation, route}: any) => {
     } else {
       setProfileId(auth.id);
     }
-  }, [route]);
+  }, [route.params]);
 
   useEffect(() => {
     if (profileId) {
@@ -75,10 +78,22 @@ const ProfileScreen = ({navigation, route}: any) => {
     }
   };
 
-  console.log(profile);
-
   return (
-    <ContainerComponent back title="Profile">
+    <ContainerComponent
+      back
+      title={route.params ? '' : 'Profile'}
+      right={
+        <ButtonComponent
+          icon={
+            <MaterialIcons
+              name="more-vert"
+              size={24}
+              color={appColors.text}
+              onPress={() => {}}
+            />
+          }
+        />
+      }>
       {isLoading ? (
         <ActivityIndicator />
       ) : profile ? (
@@ -111,14 +126,23 @@ const ProfileScreen = ({navigation, route}: any) => {
                   text={`${profile.following.length}`}
                   size={20}
                 />
+                <SpaceComponent height={8} />
                 <TextComponent text="Following" />
               </View>
+              <View
+                style={{
+                  backgroundColor: appColors.gray2,
+                  width: 1,
+                  height: '100%',
+                }}
+              />
               <View style={[globalStyles.center, {flex: 1}]}>
                 <TextComponent
                   title
                   text={`${userFollowers.length}`}
                   size={20}
                 />
+                <SpaceComponent height={8} />
                 <TextComponent text="Followers" />
               </View>
             </RowComponent>

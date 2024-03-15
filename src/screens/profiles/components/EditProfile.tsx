@@ -14,6 +14,8 @@ import {appColors} from '../../../constants/appColors';
 import {globalStyles} from '../../../styles/globalStyles';
 import {Edit, Edit2} from 'iconsax-react-native';
 import ModalSelectCategories from '../../../modals/ModalSelectCategories';
+import {Category} from '../../../models/Category';
+import eventAPI from '../../../apis/eventApi';
 
 interface Props {
   profile: ProfileModel;
@@ -23,8 +25,23 @@ const EditProfile = (props: Props) => {
   const {profile} = props;
 
   const [isVisibleModalCategory, setIsVisibleModalCategory] = useState(false);
-
+  const [categories, setCategories] = useState<Category[]>([]);
   const navigation: any = useNavigation();
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const getCategories = async () => {
+    const api = `/get-categories`;
+    try {
+      const res: any = await eventAPI.HandleEvent(api);
+
+      setCategories(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <SectionComponent>
@@ -52,45 +69,37 @@ const EditProfile = (props: Props) => {
       <>
         <RowComponent>
           <TextComponent flex={1} text="Interests" title size={18} />
-          <RowComponent onPress={() => setIsVisibleModalCategory(true)}>
-            <Edit2 size={18} color={appColors.text} />
+          <RowComponent
+            styles={[globalStyles.tag, {backgroundColor: '#FDFDFE'}]}
+            onPress={() => setIsVisibleModalCategory(true)}>
+            <Edit2 size={18} color={appColors.primary} />
             <SpaceComponent width={8} />
-            <TextComponent text="Change" />
+            <TextComponent text="Change" color={appColors.primary} />
           </RowComponent>
-          {/* <ButtonComponent
-            styles={[
-              globalStyles.tag,
-              {
-                backgroundColor: appColors.primary,
-                marginBottom: 0,
-                margin: 0,
-                paddingHorizontal: 12,
-              },
-            ]}
-            text="Change"
-            type="primary"
-          /> */}
         </RowComponent>
         <RowComponent styles={{flexWrap: 'wrap', justifyContent: 'flex-start'}}>
-          {Array.from({length: 9}).map((item, index) => (
-            <TagComponent
-              key={`tag${index}`}
-              bgColor="#e0e0e0"
-              label="Music"
-              styles={{
-                marginRight: 8,
-                marginBottom: 12,
-              }}
-              onPress={() => {}}
-            />
-          ))}
+          {categories.length > 0 &&
+            profile.interests &&
+            categories.map(
+              item =>
+                profile.interests?.includes(item._id) && (
+                  <View
+                    key={item._id}
+                    style={[
+                      globalStyles.tag,
+                      {backgroundColor: item.color, margin: 6},
+                    ]}>
+                    <TextComponent text={item.title} color={appColors.white} />
+                  </View>
+                ),
+            )}
         </RowComponent>
       </>
 
       <ModalSelectCategories
-        seletected={[]}
+        categories={categories}
+        seletected={profile.interests}
         onSelected={vals => {
-          console.log(vals);
           setIsVisibleModalCategory(false);
           navigation.navigate('ProfileScreen', {
             isUpdated: true,
