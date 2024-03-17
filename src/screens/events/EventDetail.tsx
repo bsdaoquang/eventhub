@@ -13,6 +13,7 @@ import {
   SectionComponent,
   SpaceComponent,
   TabBarComponent,
+  TagComponent,
   TextComponent,
 } from '../../components';
 import {appColors} from '../../constants/appColors';
@@ -20,21 +21,33 @@ import {appInfo} from '../../constants/appInfos';
 import {fontFamilies} from '../../constants/fontFamilies';
 import {LoadingModal} from '../../modals';
 import {EventModel} from '../../models/EventModel';
-import {AuthState, authSelector} from '../../redux/reducers/authReducer';
+import {
+  AuthState,
+  authSelector,
+  updateFollowing,
+} from '../../redux/reducers/authReducer';
 import {globalStyles} from '../../styles/globalStyles';
 import {DateTime} from '../../utils/DateTime';
 import {UserHandle} from '../../utils/UserHandlers';
+import userAPI from '../../apis/userApi';
+import {ProfileModel} from '../../models/ProfileModel';
+import ModalInvite from '../../modals/ModalInvite';
 
 const EventDetail = ({navigation, route}: any) => {
   const {item}: {item: EventModel} = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [followers, setFollowers] = useState<string[]>([]);
+  const [profile, setProfile] = useState<ProfileModel>();
+  const [isVisibleModalinvite, setIsVisibleModalinvite] = useState(false);
 
   const auth: AuthState = useSelector(authSelector);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    item && getFollowersById();
+    if (item) {
+      getFollowersById();
+      getProfile(item.authorId);
+    }
   }, [item]);
 
   const getFollowersById = async () => {
@@ -82,6 +95,42 @@ const EventDetail = ({navigation, route}: any) => {
       );
     } catch (error) {
       console.log(`Can not update followers in Event detail line 63, ${error}`);
+    }
+  };
+
+  const getProfile = async (id: string) => {
+    const api = `/get-profile?uid=${id}`;
+
+    setIsLoading(true);
+    try {
+      const res = await userAPI.HandleUser(api);
+      res && res.data && setProfile(res.data);
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
+
+  const handleToggleFollowing = async (id: string) => {
+    const api = `/update-following`;
+
+    setIsLoading(true);
+    try {
+      const res = await userAPI.HandleUser(
+        api,
+        {
+          uid: auth.id,
+          authorId: id,
+        },
+        'put',
+      );
+      dispatch(updateFollowing(res.data));
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
     }
   };
 
@@ -164,6 +213,7 @@ const EventDetail = ({navigation, route}: any) => {
                 ]}>
                 <AvatarGroup userIds={item.users} size={36} />
                 <TouchableOpacity
+                  onPress={() => setIsVisibleModalinvite(true)}
                   style={[
                     globalStyles.button,
                     {backgroundColor: appColors.primary, paddingVertical: 8},
@@ -175,6 +225,7 @@ const EventDetail = ({navigation, route}: any) => {
           ) : (
             <>
               <ButtonComponent
+                onPress={() => setIsVisibleModalinvite(true)}
                 text="Invite"
                 styles={{borderRadius: 100}}
                 type="primary"
@@ -245,42 +296,61 @@ const EventDetail = ({navigation, route}: any) => {
                 />
               </View>
             </RowComponent>
-            <RowComponent
-              styles={{marginBottom: 20}}
-              onPress={() =>
-                navigation.navigate('ProfileScreen', {
-                  id: item.authorId,
-                })
-              }>
-              <Image
-                source={{
-                  uri: 'https://gamek.mediacdn.vn/133514250583805952/2022/5/18/photo-1-16528608926331302726659.jpg',
-                }}
-                style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 12,
-                  resizeMode: 'cover',
-                }}
-              />
-              <SpaceComponent width={16} />
-              <View
-                style={{
-                  flex: 1,
-                  height: 48,
-                  justifyContent: 'space-around',
-                }}>
-                <TextComponent
-                  text="Son Tung MTP"
-                  font={fontFamilies.medium}
-                  size={16}
+            {profile && (
+              <RowComponent
+                styles={{marginBottom: 20}}
+                onPress={() =>
+                  navigation.navigate('ProfileScreen', {
+                    id: item.authorId,
+                  })
+                }>
+                <Image
+                  source={{
+                    uri: profile.photoUrl
+                      ? profile.photoUrl
+                      : 'https://img.icons8.com/cute-clipart/64/user-male-circle.png',
+                  }}
+                  style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 12,
+                    resizeMode: 'cover',
+                  }}
                 />
-                <TextComponent
-                  text="Tuesday, 4:00PM - 9:00PM"
-                  color={appColors.gray}
+                <SpaceComponent width={16} />
+                <View
+                  style={{
+                    flex: 1,
+                    height: 48,
+                    justifyContent: 'space-around',
+                  }}>
+                  <TextComponent
+                    text={profile.name ? profile.name : profile?.email}
+                    font={fontFamilies.medium}
+                    size={16}
+                  />
+                  <TextComponent
+                    text={profile.type ? profile.type : 'Personal'}
+                    color={appColors.gray}
+                  />
+                </View>
+
+                <TagComponent
+                  label={
+                    auth.following && auth.following.includes(item.authorId)
+                      ? 'Unfollow'
+                      : 'Follow'
+                  }
+                  onPress={() => handleToggleFollowing(item.authorId)}
+                  styles={{
+                    backgroundColor: `${appColors.primary}20`,
+                    borderRadius: 12,
+                  }}
+                  textStyles={{fontFamily: fontFamilies.regular}}
+                  textColor={appColors.primary}
                 />
-              </View>
-            </RowComponent>
+              </RowComponent>
+            )}
           </SectionComponent>
           <TabBarComponent title="About Event" />
           <SectionComponent>
@@ -319,6 +389,11 @@ const EventDetail = ({navigation, route}: any) => {
       </LinearGradient>
 
       <LoadingModal visible={isLoading} />
+
+      <ModalInvite
+        visible={isVisibleModalinvite}
+        onClose={() => setIsVisibleModalinvite(false)}
+      />
     </View>
   );
 };

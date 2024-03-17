@@ -19,6 +19,7 @@ import SpaceComponent from './SpaceComponent';
 import TabBarComponent from './TabBarComponent';
 import TagComponent from './TagComponent';
 import TextComponent from './TextComponent';
+import UserComponent from './UserComponent';
 
 export {
   SpaceComponent,
@@ -42,4 +43,5 @@ export {
   MakerCustom,
   LoadingComponent,
   AvatarComponent,
+  UserComponent,
 };
